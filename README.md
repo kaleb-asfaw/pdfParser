@@ -47,10 +47,11 @@ Install System Dependencies:
 **For macOS:**
 
 Install System Dependencies:
+
    ```bash
    Copy code
    brew install portaudio
-
+   ```
 **For Windows:**
 
 Install Python Dependencies:
