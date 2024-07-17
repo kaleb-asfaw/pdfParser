@@ -1,0 +1,3 @@
+pyttsx3
+pyaudio
+# Add other dependencies here
