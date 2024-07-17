@@ -22,7 +22,8 @@ To get started with this project, follow these steps:
    cd yourrepository
 
 2. **Run the Setup Script**
-   ```chmod +x setup.sh
+   ```bash
+   chmod +x setup.sh
   ./setup.sh
 
 ### Manual Installation
@@ -30,35 +31,36 @@ To get started with this project, follow these steps:
 
 Install System Dependencies:
 
-a. For Debian-based systems (Ubuntu):
+1. **For Debian-based systems (Ubuntu):**
 
    ```bash
    Copy code
    sudo apt update
    sudo apt install portaudio19-dev python3-dev
 
-b. For Red Hat-based systems (Fedora):
+2. **For Red Hat-based systems (Fedora):**
 
-```bash
-Copy code
-sudo dnf install portaudio-devel python3-devel
+   ```bash
+   Copy code
+   sudo dnf install portaudio-devel python3-devel
 
 **For macOS:**
 
 Install System Dependencies:
-bash
-Copy code
-brew install portaudio
+   ```bash
+   Copy code
+   brew install portaudio
+
 **For Windows:**
 
 Install Python Dependencies:
 
-bash
-Copy code
-pip install -r requirements.txt
-Note: Windows users usually do not need to manually install PortAudio. Ensure you have the latest versions of pip, setuptools, and wheel:
+   ```bash
+   Copy code
+   pip install -r requirements.txt
+   Note: Windows users usually do not need to manually install PortAudio. Ensure you have the latest versions of pip, setuptools, and wheel:
 
-bash
-Copy code
-pip install --upgrade pip setuptools wheel
+   ```bash
+   Copy code
+   pip install --upgrade pip setuptools wheel
 
