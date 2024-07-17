@@ -2,7 +2,7 @@
 
 ## Overview
 
-Brief description of your project.
+Converts boring school readings into summaries and audio files
 
 ## Installation
 
@@ -22,7 +22,7 @@ To get started with this project, follow these steps:
    cd yourrepository
 
 2. **Run the Setup Script**
-  chmod +x setup.sh
+   ```chmod +x setup.sh
   ./setup.sh
 
 ### Manual Installation
@@ -30,24 +30,26 @@ To get started with this project, follow these steps:
 
 Install System Dependencies:
 
-For Debian-based systems (Ubuntu):
+a. For Debian-based systems (Ubuntu):
 
-bash
-Copy code
-sudo apt update
-sudo apt install portaudio19-dev python3-dev
-For Red Hat-based systems (Fedora):
+   ```bash
+   Copy code
+   sudo apt update
+   sudo apt install portaudio19-dev python3-dev
 
-bash
+b. For Red Hat-based systems (Fedora):
+
+```bash
 Copy code
 sudo dnf install portaudio-devel python3-devel
-For macOS:
+
+**For macOS:**
 
 Install System Dependencies:
 bash
 Copy code
 brew install portaudio
-For Windows:
+**For Windows:**
 
 Install Python Dependencies:
 
