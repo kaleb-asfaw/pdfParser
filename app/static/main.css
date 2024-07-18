@@ -1,0 +1,88 @@
+/* Styling for login, register pages (buttons, cards, text, etc.) */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f8f8f8;
+}
+
+.container {
+    text-align: center;
+}
+
+.login-card, .register-card {
+    background-color: #2c3e50;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+
+h1 {
+    color: #ecf0f1;
+    margin-bottom: 30px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.btn {
+    background-color: #2980b9;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn:hover {
+    background-color: #3498db;
+}
+
+.google-auth-btn {
+    background-color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.google-auth-btn img {
+    width: 20px;
+    height: 20px;
+}
+
+.google-auth-btn:hover {
+    background-color: #f1f1f1;
+}
+
+.small-text {
+    color: #ecf0f1;
+    margin-top: 15px;
+}
+
+.small-text a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.small-text a:hover {
+    text-decoration: underline;
+}
