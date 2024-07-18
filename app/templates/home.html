@@ -1,26 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Parser</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>PDF Parser</h1>
-        </header>
+{% extends "layout.html" %}
+{% block content %}
         <main>
-            <div class="content">
-                <h2>PDF Pal</h2>
+            <div>
                 <p>Transform your PDFs into audio summaries</p>
                 <button class="parse-button">Start Parsing</button>
             </div>
         </main>
         <footer>
             <button class="login-button">Login</button>
-        </footer>
-    </div>
-</body>
-</html>
+{% endblock content %}
