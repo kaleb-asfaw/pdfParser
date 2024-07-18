@@ -34,14 +34,12 @@ Install System Dependencies:
 1. **For Debian-based systems (Ubuntu):**
 
    ```bash
-   Copy code
    sudo apt update
    sudo apt install portaudio19-dev python3-dev
 
 2. **For Red Hat-based systems (Fedora):**
 
    ```bash
-   Copy code
    sudo dnf install portaudio-devel python3-devel
 
 **For macOS:**
@@ -49,7 +47,6 @@ Install System Dependencies:
 Install System Dependencies:
 
    ```bash
-   Copy code
    brew install portaudio
    ```
 **For Windows:**
@@ -57,11 +54,9 @@ Install System Dependencies:
 Install Python Dependencies:
 
    ```bash
-   Copy code
    pip install -r requirements.txt
    Note: Windows users usually do not need to manually install PortAudio. Ensure you have the latest versions of pip, setuptools, and wheel:
 
    ```bash
-   Copy code
    pip install --upgrade pip setuptools wheel
 
