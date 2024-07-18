@@ -11,3 +11,7 @@ if not os.environ.get('FLASK_KEY'):
 @app.route('/', methods=['GET'])
 def home():
     return render_template('home.html')
+
+@app.route('/login', methods=['GET'])
+def login():
+    return render_template('login.html')
