@@ -1,5 +1,5 @@
-pyttsx3
-pyaudio
-pydub
-simpleaudio
 # Add other dependencies here
+pyttsx3==2.90
+pyaudio==0.2.14
+PyPDF2==3.0.1
+1f9ebc412305462a64834ab6e32a4b63e31bcb62
