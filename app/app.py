@@ -6,7 +6,7 @@ app = Flask(__name__)
 proxied = FlaskBehindProxy(app)
 app.config['SECRET_KEY'] = os.environ.get('FLASK_KEY')
 if not os.environ.get('FLASK_KEY'):
-    raise EnvironmentError("Config key for Flask app was not set")
+    app.config['SECRET_KEY']('a5783ee1abf428d9a22445b69e1c1ab4')
 
 @app.route('/', methods=['GET'])
 def home():
