@@ -17,7 +17,7 @@ def save_audio(engine, text, output_file):
             frames.append(data)
             return (data, pyaudio.paContinue)
 
-        nonlocal stream
+        # nonlocal stream
         p = pyaudio.PyAudio()
         stream = p.open(format=pyaudio.paInt16,
                         channels=1,
