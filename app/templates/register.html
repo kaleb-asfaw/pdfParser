@@ -9,11 +9,22 @@
     <body>
         <div class="container">
             <div class="register-card">
-                <h1>PDF Pal</h1>
-                <button class="google-auth-btn">
-                    <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Google Logo">
-                    Sign up with Google
-                </button>
+                <h1>Register</h1>
+                <form>
+                    <div class="input-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="email">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password" name="confirm-password" required>
+                    </div>
+                    <button type="submit" class="btn">Register</button>
+                </form>
             </div>
         </div>
     </body>
