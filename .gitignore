@@ -1,3 +1,7 @@
 # ignore virtual env and pdf dir
 .env/
 pdf/
+*.pyc
+__pycache__/
+*.json
+*.db
