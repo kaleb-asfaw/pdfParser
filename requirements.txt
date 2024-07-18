@@ -1,3 +1,5 @@
 pyttsx3
 pyaudio
+pydub
+simpleaudio
 # Add other dependencies here

@@ -36,13 +36,13 @@ Install System Dependencies:
    ```bash
    Copy code
    sudo apt update
-   sudo apt install portaudio19-dev python3-dev
+   sudo apt install portaudio19-dev python3-dev libespeak1
 
 2. **For Red Hat-based systems (Fedora):**
 
    ```bash
    Copy code
-   sudo dnf install portaudio-devel python3-devel
+   sudo dnf install portaudio-devel python3-devel [other system dependencies here]
 
 **For macOS:**
 
@@ -50,7 +50,7 @@ Install System Dependencies:
 
    ```bash
    Copy code
-   brew install portaudio
+   brew install portaudio [...]
    ```
 **For Windows:**
 
