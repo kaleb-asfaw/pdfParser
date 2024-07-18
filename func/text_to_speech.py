@@ -14,10 +14,21 @@ def save_audio(engine, text, output_file):
     # Define a temporary file for pyttsx3 to save the audio
     temp_file = "temp_output.wav"
 
+<<<<<<< HEAD
     try:
         # Save text to speech in the temporary file
         engine.save_to_file(text, temp_file)
         engine.runAndWait()
+=======
+        # nonlocal stream
+        p = pyaudio.PyAudio()
+        stream = p.open(format=pyaudio.paInt16,
+                        channels=1,
+                        rate=44100,
+                        input=True,
+                        frames_per_buffer=1024,
+                        stream_callback=callback)
+>>>>>>> a0db795b95f3df0cd2c6970c607fcf11f57e5c88
 
         # Load the temporary file
         audio = AudioSegment.from_file(temp_file, format="wav")
