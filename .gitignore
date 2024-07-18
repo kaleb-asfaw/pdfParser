@@ -1,0 +1,3 @@
+# ignore virtual env and pdf dir
+.env/
+pdf/
