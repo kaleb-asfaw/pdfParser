@@ -1,13 +1,23 @@
 from google.cloud import texttospeech
-import os
+from google.oauth2 import service_account
+import os, base64, json
 
-# Set the path to the service account key file
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'credentials.json'
+credentials_base64 = os.getenv('GOOGLETTS_CREDENTIALS_BASE64')
+if not os.getenv('GOOGLETTS_CREDENTIALS_BASE64'):
+    raise EnvironmentError("Did not retrieve Google TTS key from the environment.")
+
+credentials_json = base64.b64decode(credentials_base64).decode('utf-8')
+credentials_data = json.loads(credentials_json)
+
+# Create temporary file to store credentials
+with open('temp_credentials.json', 'w') as f:
+    f.write(credentials_json)
+
+credentials = service_account.Credentials.from_service_account_file('temp_credentials.json')
+client = texttospeech.TextToSpeechClient(credentials=credentials)
+os.remove('temp_credentials.json')
 
 def text_to_speech(input_file, output_file):
-    # Initialize the Text-to-Speech client
-    client = texttospeech.TextToSpeechClient()
-
     # Read the text from the file
     with open(input_file, 'r') as file:
         text = file.read()
@@ -39,9 +49,6 @@ def text_to_speech(input_file, output_file):
 
 
 def list_voices():
-    # Initialize the Text-to-Speech client
-    client = texttospeech.TextToSpeechClient()
-
     # Call the API to list voices
     response = client.list_voices()
 
@@ -56,6 +63,6 @@ def list_voices():
 # list_voices()
 
 # Example usage of text_to_speech
-# input_file = "input.txt"
-# output_file = "output.mp3"
-# text_to_speech(input_file, output_file)
+input_file = "func/text_files/input.txt"
+output_file = "func/recordings/output4.mp3"
+text_to_speech(input_file, output_file)

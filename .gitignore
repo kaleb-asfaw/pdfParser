@@ -3,5 +3,9 @@
 pdf/
 *.pyc
 __pycache__/
-*.json
 *.db
+
+# for testing of TTS service
+recordings/
+text_files/
+*.json
