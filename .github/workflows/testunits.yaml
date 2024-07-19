@@ -22,4 +22,4 @@ jobs:
 
       - name: Flask Application unittests
         working-directory: ./test/app
-        run: python3 -m unittest app.py
+        run: python3 app.py
