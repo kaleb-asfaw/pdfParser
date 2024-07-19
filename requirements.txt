@@ -3,3 +3,4 @@ Flask==3.0.3
 flask_behind_proxy==0.1.1
 wordninja==2.0.0
 google-cloud-texttospeech==2.16.4
+openai==1.35.13
