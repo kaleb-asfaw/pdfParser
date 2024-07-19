@@ -7,10 +7,10 @@
     color: #333;
 }
 
-.layout h1 nav a{
-    font-size: 1.5rem;
-    color: #ecf0f1
+nav a {
+    color: #fff;
 }
+
 
 .layout-header {
     background-color: #365B6D;
@@ -20,6 +20,7 @@
     align-items: center;
     color: #fff;
     font-size: 1.5rem;
+    
 }
 
 
