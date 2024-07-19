@@ -1,24 +1,35 @@
 {% extends "layout.html" %}
 {% block content %}
 <div class="output-container">
-    <div class="left-side">
+    <div class="audio-card">
         <div class="audio-controls">
             <audio id="audioPlayer" src="your-audio-file.mp3" controls>
                 Your browser does not support the audio element.
             </audio>
             <br>
-            <button onclick="playAudio()">Play</button>
+            <img src="../static/play.png" alt="Download Icon" onclick="playAudio()" class="audio-button">
             <button onclick="pauseAudio()">Pause</button>
             <button onclick="rewindAudio()">Rewind</button>
             <button onclick="forwardAudio()">Forward</button>
             <br><br>
-            <button onclick="downloadAudio()">Download</button>
-            <button onclick="saveToLibrary()">Save to Library</button>
+            <div class="icon-text-container">
+                <img src="../static/download.png" alt="Download Icon" onclick="downloadAudio()" class="download-button">
+                <span class="icon-text">Download Audio</span>
+            </div>
+            <div class="icon-text-container">
+                <img src="../static/blue-folder.png" alt="Save to My Library Icon" onclick="saveToLibrary()" class="send-button">
+                <span class="icon-text">Save to My Library</span>
+            </div>
+            <!-- <button onclick="saveToLibrary()">Save to Library</button> -->
         </div>
     </div>
-    <div class="right-side">
+    <div class="output-text-card">
         <div class="text-box">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel malesuada sapien. Duis aliquet, turpis eget posuere dapibus, dolor metus blandit sapien, a tincidunt libero nisi ac arcu. Sed ultricies, ligula vel convallis pretium, lacus nulla fermentum quam, sit amet congue lorem eros nec sapien. Nulla facilisi. Sed tincidunt, felis a egestas congue, leo purus venenatis nulla, nec iaculis metus nunc ut ex. Sed venenatis dolor at orci varius, ac cursus metus dapibus. Integer eget gravida turpis. Suspendisse potenti.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor erat in venenatis euismod. Nam vestibulum efficitur tortor, tincidunt condimentum nunc cursus in. Aliquam sit amet interdum odio, nec tincidunt sem. Fusce ullamcorper diam a sapien tincidunt, eget venenatis dui condimentum. Vivamus auctor, sem id ultricies aliquam, lorem tellus tincidunt elit, sit amet pretium elit velit eu ipsum. Fusce purus justo, elementum sagittis gravida in, lobortis sed sapien. In porttitor, orci egestas condimentum elementum, dolor ipsum sagittis nisi, et bibendum neque orci vitae ligula. Duis pretium ac dui at cursus. Nam nunc quam, tempor nec leo ultricies, pharetra posuere turpis. Sed fermentum, mi malesuada cursus faucibus, orci ligula ullamcorper risus, ac condimentum erat lorem non lacus. Aenean dictum quam sit amet placerat porttitor. Cras vitae rhoncus ante, ut porta urna. Cras vitae arcu ornare, vulputate diam nec, varius massa. Donec tincidunt maximus porttitor. Curabitur convallis lorem dui, vel mollis elit porttitor sed. Integer rhoncus, ipsum in semper lobortis, enim enim facilisis sapien, sed ultrices mauris augue in dolor.
+
+                Nullam sed arcu quis elit vehicula fringilla nec non erat. Sed lacinia tristique orci sed finibus. Suspendisse tristique dolor nec lacinia lobortis. Nullam molestie dapibus nulla, at vehicula ante venenatis ut. Suspendisse interdum nunc nec arcu interdum gravida. Donec semper feugiat elementum. Sed fermentum nulla eros, a interdum nisl imperdiet quis.
+                
+                Fusce mi tortor, tempor vel elit sed, sagittis facilisis metus. Praesent consectetur consequat turpis, eu vulputate metus sodales sed. Aliquam interdum, ipsum ut facilisis pellentesque, lorem tortor euismod lectus, non venenatis libero lorem a elit. Donec tempor ligula vel nisi pretium, at pretium nisl condimentum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel massa a mauris ornare porta eget a odio. Suspendisse nibh lacus, ultricies id tristique nec, venenatis non odio. Aliquam varius orci turpis, eu feugiat diam mattis sit amet. Maecenas a metus ultrices, finibus enim a, pulvinar enim. Proin est justo, semper eu magna id, aliquam dignissim purus. Maecenas in ultricies arcu. Etiam sollicitudin sit amet ligula in commodo. Integer nulla sapien, egestas at consequat ut, finibus in turpis. Vestibulum vitae ultrices ipsum. Duis pulvinar nec odio nec hendrerit. Nunc sed ultrices erat.</p>
         </div>
     </div>
 </div>
