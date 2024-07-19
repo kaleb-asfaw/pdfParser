@@ -1,3 +1,122 @@
-{% extends "layout.html" %}
-{% block content %}
-{% endblock content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Pal - My Library</title>
+    <link rel="stylesheet" href="../static/main.css">
+</head>
+<body class="library-body">
+    <header class="header">
+        <h1>PDF Pal</h1>
+        <nav>
+            <a href="home.html">Home</a>
+            <a href="login.html">Sign Out</a>
+        </nav>
+    </header>
+    <main>
+        <a href="home.html" class="back-link">← Back to home</a>
+        <h2>My Library</h2>
+        <button onclick="addFolder()">Add Folder</button>
+        <div class="library" id="library">
+            <!-- Folders will be dynamically inserted here -->
+        </div>
+    </main>
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h3 id="modal-title"></h3>
+            <input type="file" id="audio-upload" accept="audio/*" multiple>
+            <ul id="audio-list"></ul>
+        </div>
+    </div>
+    <script>
+        let folderCount = 0; // Start with 0 folders
+        const audioFiles = {}; // Object to store audio files for each folder
+
+        function addFolder() {
+            folderCount++;
+            const folderName = `untitled ${folderCount}`;
+            const library = document.getElementById('library');
+            const folder = document.createElement('div');
+            folder.className = 'folder';
+            folder.innerHTML = `
+                <img src="../static/icons8-folder-48.png" alt="Folder" onclick="openFolder('${folderName}')">
+                <p>${folderName}</p>
+                <button onclick="renameFolder('${folderName}', this)">Rename</button>
+            `;
+            library.appendChild(folder);
+            audioFiles[folderName] = []; // Initialize empty array for audio files
+        }
+
+        function openFolder(folderId) {
+            document.getElementById('modal-title').innerText = `Manage ${folderId}`;
+            document.getElementById('modal').style.display = 'block';
+            document.getElementById('audio-upload').dataset.folder = folderId;
+            renderAudioList(folderId);
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function renameFolder(folderId, buttonElement) {
+            const newName = prompt('Enter new course name:', folderId);
+            if (newName && newName !== folderId) {
+                const folderDiv = buttonElement.parentElement;
+                const folderNameElement = folderDiv.querySelector('p');
+                const folderImageElement = folderDiv.querySelector('img');
+                folderNameElement.innerText = newName;
+                folderImageElement.setAttribute('onclick', `openFolder('${newName}')`);
+                buttonElement.setAttribute('onclick', `renameFolder('${newName}', this)`);
+                // Update audioFiles keys
+                audioFiles[newName] = audioFiles[folderId];
+                delete audioFiles[folderId];
+            }
+        }
+
+        function renderAudioList(folderId) {
+            const audioList = document.getElementById('audio-list');
+            audioList.innerHTML = '';
+            const files = audioFiles[folderId];
+            files.forEach((file, index) => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <span onclick="renameAudio('${folderId}', ${index})">${file.name}</span>
+                    <button onclick="deleteAudio('${folderId}', ${index})">Delete</button>
+                `;
+                audioList.appendChild(listItem);
+            });
+        }
+
+        function renameAudio(folderId, index) {
+            const newName = prompt('Enter new audio name:', audioFiles[folderId][index].name);
+            if (newName) {
+                audioFiles[folderId][index].name = newName;
+                renderAudioList(folderId);
+            }
+        }
+
+        function deleteAudio(folderId, index) {
+            audioFiles[folderId].splice(index, 1);
+            renderAudioList(folderId);
+        }
+
+        document.getElementById('audio-upload').addEventListener('change', (event) => {
+            const folderId = event.target.dataset.folder;
+            const files = event.target.files;
+            for (let file of files) {
+                audioFiles[folderId].push({ name: file.name, file });
+            }
+            renderAudioList(folderId);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize audio files for existing folders
+            for (let i = 1; i <= folderCount; i++) {
+                audioFiles[`untitled ${i}`] = [];
+            }
+        });
+    </script>
+</body class="library-body">
+</html>
