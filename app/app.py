@@ -24,5 +24,14 @@ def register():
 def library():
     return render_template('library.html')
 
+@app.route('/output', methods=['GET'])
+def output():
+    return render_template('output.html')
+
+@app.route('/dashboard', methods=['GET'])
+def dashboard():
+    return render_template('pdfhome.html')
+
+
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")

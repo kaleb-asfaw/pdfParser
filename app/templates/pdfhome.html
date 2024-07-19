@@ -1,19 +1,5 @@
-<!DOCTYPE html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>PDF Pal - PDF Home</title>
-        <link rel="stylesheet" href="../static/main.css">
-    </head>
-    <body class="home-body">
-        <header>
-            <div class="navbar">
-                <h1>PDF Pal</h1>
-                <nav>
-                    <a href="home.html">Sign Out</a>
-                </nav>
-            </div>
-        </header>
+{% extends "layout.html" %}
+{% block content %}
         <div class="content">
             <div class="upload-section">
                 <h2>Upload a PDF</h2>
@@ -25,10 +11,11 @@
         </div>
         <div class="library-section">
             <h2>My Library</h2>
-            <a href="library.html">
+            <a href="/library">
                 <img src="../static/icons8-folder-48.png" alt="My Library">
             </a>
         </div>
     </div>
     </body>
 </html>
+{% endblock content %}

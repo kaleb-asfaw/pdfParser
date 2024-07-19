@@ -23,6 +23,42 @@ nav a {
     
 }
 
+/* styling for output.html */
+.left-side {
+    width: 50%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.right-side {
+    width: 50%;
+    background-color: white;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+.audio-controls {
+    margin-bottom: 20px;
+}
+
+.audio-controls button {
+    margin-right: 10px;
+}
+
+.text-box {
+    height: 100%;
+}
+
+.hidden {
+    display: none;
+}
+
+.output-container{
+    display: flex;
+    /* justify-content: space-between; */
+}
+
 
 /* Styling for login, register pages (buttons, cards, text, etc.) */
 .login-body {

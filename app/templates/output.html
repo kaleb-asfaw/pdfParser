@@ -1,3 +1,60 @@
 {% extends "layout.html" %}
 {% block content %}
+<div class="output-container">
+    <div class="left-side">
+        <div class="audio-controls">
+            <audio id="audioPlayer" src="your-audio-file.mp3" controls>
+                Your browser does not support the audio element.
+            </audio>
+            <br>
+            <button onclick="playAudio()">Play</button>
+            <button onclick="pauseAudio()">Pause</button>
+            <button onclick="rewindAudio()">Rewind</button>
+            <button onclick="forwardAudio()">Forward</button>
+            <br><br>
+            <button onclick="downloadAudio()">Download</button>
+            <button onclick="saveToLibrary()">Save to Library</button>
+        </div>
+    </div>
+    <div class="right-side">
+        <div class="text-box">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vel malesuada sapien. Duis aliquet, turpis eget posuere dapibus, dolor metus blandit sapien, a tincidunt libero nisi ac arcu. Sed ultricies, ligula vel convallis pretium, lacus nulla fermentum quam, sit amet congue lorem eros nec sapien. Nulla facilisi. Sed tincidunt, felis a egestas congue, leo purus venenatis nulla, nec iaculis metus nunc ut ex. Sed venenatis dolor at orci varius, ac cursus metus dapibus. Integer eget gravida turpis. Suspendisse potenti.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const audioPlayer = document.getElementById('audioPlayer');
+
+    function playAudio() {
+        audioPlayer.play();
+    }
+
+    function pauseAudio() {
+        audioPlayer.pause();
+    }
+
+    function rewindAudio() {
+        audioPlayer.currentTime -= 10; // Rewind by 10 seconds
+    }
+
+    function forwardAudio() {
+        audioPlayer.currentTime += 10; // Forward by 10 seconds
+    }
+
+    function downloadAudio() {
+        const link = document.createElement('a');
+        link.href = audioPlayer.src;
+        link.download = 'audio-file.mp3'; // Set the filename for download
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function saveToLibrary() {
+        // For this example, saving to library is simulated as a console log
+        console.log('Saved to library!');
+        alert('Audio saved to library!');
+    }
+</script>
 {% endblock content %}
