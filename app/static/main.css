@@ -168,7 +168,8 @@ header {
     box-sizing: border-box;
 }
 
-.upload-section, .library-section {
+.upload-section, 
+.library-section {
     text-align: center;
     flex: 1;
     display: flex;
@@ -177,19 +178,132 @@ header {
     justify-content: center;
 }
 
-.upload-section h2, .library-section h2 {
+.upload-section h2, 
+.library-section h2 {
     margin-bottom: 20px;
     font-size: 24px;
     color: #2c3e50;
 }
 
-.upload-icon img, .library-section img {
+.upload-icon img, 
+.library-section img {
     width: 100px;
     height: 100px;
     cursor: pointer;
     transition: transform 0.2s;
 }
 
-.upload-icon img:hover, .library-section img:hover {
+.upload-icon img:hover, 
+.library-section img:hover {
     transform: scale(1.1);
 }
+
+/* Styling for library.html (content, headers, folders, etc.) */
+.library-body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.header {
+    background-color: #1e1e2f;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+}
+
+.header h1 {
+    margin: 0;
+}
+
+.header nav a {
+    margin-left: 1rem;
+    color: #fff;
+    text-decoration: none;
+}
+
+.header nav a:hover {
+    text-decoration: underline;
+}
+
+.back-link {
+    display: inline-block;
+    margin: 1rem 0;
+    color: #1e1e2f;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.library {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.folder {
+    background-color: #3f3f4e;
+    padding: 1rem;
+    border-radius: 5px;
+    width: 150px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+.folder:hover {
+    transform: translateY(-5px);
+    background-color: #52526e;
+}
+
+.folder img {
+    width: 100px;
+    height: auto;
+}
+
+.folder p {
+    margin: 0.5rem 0 0;
+    color: #fff;
+}
+
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+    padding-top: 60px; 
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
