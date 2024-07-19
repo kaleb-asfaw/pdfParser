@@ -16,5 +16,13 @@ def home():
 def login():
     return render_template('login.html')
 
+@app.route('/register', methods=['GET'])
+def register():
+    return render_template('register.html')
+
+@app.route('/library', methods=['GET'])
+def library():
+    return render_template('library.html')
+
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")
