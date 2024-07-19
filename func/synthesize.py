@@ -17,8 +17,9 @@ def text_to_speech(input_file, output_file):
 
     # Build the voice request, select the language code and the voice name
     voice = texttospeech.VoiceSelectionParams(
-        language_code="en-US", 
-        ssml_gender=texttospeech.SsmlVoiceGender.NEUTRAL
+        language_code="en-US",
+        name = "en-US-Standard-G", 
+        ssml_gender=texttospeech.SsmlVoiceGender.FEMALE
     )
 
     # Select the type of audio file you want
@@ -55,6 +56,6 @@ def list_voices():
 # list_voices()
 
 # Example usage of text_to_speech
-input_file = "input-2.txt"
-output_file = "output2.mp3"
-text_to_speech(input_file, output_file)
+# input_file = "input.txt"
+# output_file = "output.mp3"
+# text_to_speech(input_file, output_file)
