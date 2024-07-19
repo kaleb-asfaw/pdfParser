@@ -2,7 +2,9 @@ PyPDF2==3.0.1
 Flask==3.0.3
 flask_behind_proxy==0.1.1
 wordninja==2.0.0
+openai==1.35.13
 
 # stuff for GoogleTTS
-# pip install --upgrade google-cloud-texttospeech
-# 
+pip install --upgrade google-cloud-texttospeech
+ 
+
