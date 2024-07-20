@@ -73,9 +73,7 @@ nav a {
     font-size: 1.25rem;
 }
 
-/* a:hover {
-    filter: brightness(0.75);
-} */
+
 
 
 
@@ -114,24 +112,25 @@ h3 {
     padding: 20px;
     box-sizing: border-box;
     overflow: auto;
-    /* margin-right: 20px; */
-    /* margin-top: 40px;  */
 }
 
-
+.audio-container{
+    justify-content: center;
+}
 .audio-button {
     transition: filter 0.3s;
-    background-color: #365B6D;
-    color: #fff;
-
-    border: none;
-    padding: 10px 20px;
+    height: 40px;
+    width: 40px;
+    margin: 15px;
     margin-top: 10px;
-    cursor: pointer;
-    border-radius: 4px;
+    margin-bottom: 0;
+}
+.audio-button:hover {
+    filter: brightness(80%) contrast(50%);
 }
 
-.download-button:hover, .audio-button:hover, .send-button:hover{
+
+.download-button:hover, .send-button:hover{
     filter: brightness(1.5);
 }
 
