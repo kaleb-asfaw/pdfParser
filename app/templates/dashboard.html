@@ -3,10 +3,11 @@
         <div class="content">
             <div class="upload-section">
                 <h2>Upload a PDF</h2>
-                <label for="pdf-upload" class="upload-icon">
-                    <input type="file" id="pdf-upload" accept="application/pdf" hidden>
-                    <img src="../static/icons8-upload-file-48.png" alt="Upload PDF">
-                </label>
+                <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+                    <!-- <input type="file" id="pdf-upload" accept="application/pdf" hidden> -->
+                    <input type="file" name="file" accept="application/pdf" required>
+                    <img src="../static/icons8-upload-file-48.png" alt="Upload PDF" onclick="submitForm()">
+                </form>
             <div id="upload-status"></div>
         </div>
         <div class="library-section">
@@ -18,4 +19,10 @@
     </div>
     </body>
 </html>
+
+<script>
+    function submitForm() {
+        document.getElementById('uploadForm').submit();
+    }
+</script>
 {% endblock content %}

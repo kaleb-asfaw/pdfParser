@@ -3,10 +3,12 @@ import PyPDF2, wordninja
 from openai import OpenAI
 
 openai_key = os.getenv('OPENAI_KEY')
-if not openai_key:
-    raise EnvironmentError("Environment variable for OpenAI key was not set")
 
-client = OpenAI(api_key = openai_key)
+# TEMPORARILY BYPASSING OPENAPI KEY FOR PROOF OF CONCEPT
+# if not openai_key:
+#     raise EnvironmentError("Environment variable for OpenAI key was not set")
+
+# client = OpenAI(api_key = openai_key)
 
 def remove_whitespace(text):
     '''
@@ -107,7 +109,7 @@ def get_jumbled_text(file, start, end):
             txt += word
     return txt
 
-def get_summary(jumbled_text, focus):
+def get_summary(jumbled_text=None, focus=None):
     """
     This function should return a viable summary for the pdf input by 
     the user. 
@@ -137,6 +139,20 @@ def get_summary(jumbled_text, focus):
         model="gpt-4o-mini",
     )
     return response.choices[0].message.content.strip()
+
+def get_summary_from_upload():
+    """
+    function to be called from app.py
+    functino should take the uploaded pdf from pdf_placeholder and return summary text
+    currently using filler text for proof of concept
+    TODO: make this function work
+    """
+    # get_jumbled_text('pdf_placeholder/temp.pdf', 1, 1)
+    return """Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor erat in venenatis euismod. Nam vestibulum efficitur tortor, tincidunt condimentum nunc cursus in. Aliquam sit amet interdum odio, nec tincidunt sem. Fusce ullamcorper diam a sapien tincidunt, eget venenatis dui condimentum. Vivamus auctor, sem id ultricies aliquam, lorem tellus tincidunt elit, sit amet pretium elit velit eu ipsum. Fusce purus justo, elementum sagittis gravida in, lobortis sed sapien. In porttitor, orci egestas condimentum elementum, dolor ipsum sagittis nisi, et bibendum neque orci vitae ligula. Duis pretium ac dui at cursus. Nam nunc quam, tempor nec leo ultricies, pharetra posuere turpis. Sed fermentum, mi malesuada cursus faucibus, orci ligula ullamcorper risus, ac condimentum erat lorem non lacus. Aenean dictum quam sit amet placerat porttitor. Cras vitae rhoncus ante, ut porta urna. Cras vitae arcu ornare, vulputate diam nec, varius massa. Donec tincidunt maximus porttitor. Curabitur convallis lorem dui, vel mollis elit porttitor sed. Integer rhoncus, ipsum in semper lobortis, enim enim facilisis sapien, sed ultrices mauris augue in dolor.
+
+                Nullam sed arcu quis elit vehicula fringilla nec non erat. Sed lacinia tristique orci sed finibus. Suspendisse tristique dolor nec lacinia lobortis. Nullam molestie dapibus nulla, at vehicula ante venenatis ut. Suspendisse interdum nunc nec arcu interdum gravida. Donec semper feugiat elementum. Sed fermentum nulla eros, a interdum nisl imperdiet quis.
+                
+                Fusce mi tortor, tempor vel elit sed, sagittis facilisis metus. Praesent consectetur consequat turpis, eu vulputate metus sodales sed. Aliquam interdum, ipsum ut facilisis pellentesque, lorem tortor euismod lectus, non venenatis libero lorem a elit. Donec tempor ligula vel nisi pretium, at pretium nisl condimentum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vel massa a mauris ornare porta eget a odio. Suspendisse nibh lacus, ultricies id tristique nec, venenatis non odio. Aliquam varius orci turpis, eu feugiat diam mattis sit amet. Maecenas a metus ultrices, finibus enim a, pulvinar enim. Proin est justo, semper eu magna id, aliquam dignissim purus. Maecenas in ultricies arcu. Etiam sollicitudin sit amet ligula in commodo. Integer nulla sapien, egestas at consequat ut, finibus in turpis. Vestibulum vitae ultrices ipsum. Duis pulvinar nec odio nec hendrerit. Nunc sed ultrices erat."""
 
 if __name__ == "__main__":
     # file = "func/pdf/102-combinatorial-problems.pdf"
