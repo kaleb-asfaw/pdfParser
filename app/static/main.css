@@ -127,11 +127,13 @@ h3 {
 }
 .audio-button:hover {
     filter: brightness(80%) contrast(50%);
+    transform: scale(1.1);
 }
 
 
 .download-button:hover, .send-button:hover{
     filter: brightness(1.5);
+    transform: scale(1.1);
 }
 
 .download-button {
@@ -430,11 +432,20 @@ input {
 
 .back-link {
     display: inline-block;
-    margin: 1rem 0;
-    color: #1e1e2f;
+    margin-left: 4rem;
+    color: #365B6D;
     text-decoration: none;
     font-size: 1rem;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-weight: bold;
+    transition: filter 0.3s transform 0.3s;
 }
+
+.back-link:hover {
+    filter: brightness(1.5);
+    transform: scale(1.1);
+}
+
 
 .library {
     display: flex;
