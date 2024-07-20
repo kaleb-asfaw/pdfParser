@@ -4,6 +4,7 @@ pdf/
 *.pyc
 __pycache__/
 *.db
+.DS_Store
 
 # for testing of TTS service
 recordings/
