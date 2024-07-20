@@ -9,3 +9,5 @@ __pycache__/
 recordings/
 text_files/
 *.json
+*.mp3
+*.wav

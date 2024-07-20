@@ -20,6 +20,6 @@ jobs:
           python -m pip install --upgrade pip pytest
           pip install -r requirements.txt
 
-      #- name: Flask Application unittests
-        #working-directory: ./test/frontend
-        #run: python3 -m unittest app.py
+      - name: Flask Application unittests
+        working-directory: ./test/app
+        run: python3 app.py
