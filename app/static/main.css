@@ -204,19 +204,30 @@ h3 {
 }
 
 /* Styling for login, register pages (buttons, cards, text, etc.) */
-.login-body {
+html, body {
     margin: 0;
+    padding: 0;
+    height: 100%;
     font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.login-body {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     background: #FFFFF0;
+    position: relative;
+}
+
+.back-link:hover {
+    text-decoration: underline;
 }
 
 .container {
     display: flex;
     justify-content: center;
+    /* flex-direction: column; */
     align-items: center;
     width: 100%;
     max-width: 400px;

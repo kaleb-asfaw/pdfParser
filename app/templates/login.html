@@ -1,34 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width", initial-scale=1.0">
-        <title>PDF Pal - Login</title>
-        <link rel="stylesheet" href="../static/main.css">
-    </head>
-    <body class="login-body">
-        <div class="container">
-            <div class="login-card">
-                <h1>Login</h1>
-                <form>
-                    <div class="input-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="email">Password</label>
-                        <input type="password" id="password" name="password" required>
-                    </div>
-                    <button type="submit" class="btn">Login</button>
-                    <button type="button" class="google-auth-btn">
-                        <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Google Logo">
-                        Sign in with Google
-                    </button>
-                    <p class="small-text">
-                        Don't have an account? <a href="register.html">Register here.</a>
-                    </p>
-                </form>
-            </div>
+{% extends "layout.html" %}
+{% block content %}
+<body class="login-body">
+    <a href="/" class="back-link">← Back to home</a>
+    <div class="container">
+        <div class="login-card">
+            <h1>Login</h1>
+            <form>
+                <div class="input-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+                <button type="button" class="google-auth-btn">
+                    <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Google Logo">
+                    Sign in with Google
+                </button>
+                <p class="small-text">
+                    Don't have an account? <a href="register">Register here.</a>
+                </p>
+            </form>
         </div>
-    </body class="login-body">
-</html>
+    </div>
+</body>
+{% endblock content %}

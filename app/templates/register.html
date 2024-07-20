@@ -1,4 +1,31 @@
-<!DOCTYPE html>
+{% extends "layout.html" %}
+{% block content %}
+<body class="login-body">
+        <a href="/" class="back-link">← Back to home</a>
+        <div class="container">
+            <div class="register-card">
+                <h1>Register</h1>
+                <form>
+                    <div class="input-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="email">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="confirm-password">Confirm Password</label>
+                        <input type="password" id="confirm-password" name="confirm-password" required>
+                    </div>
+                    <button type="submit" class="btn">Register</button>
+                </form>
+            </div>
+        </div>
+    </body class="login-body">
+{% endblock content %}
+
+<!-- <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -28,4 +55,4 @@
             </div>
         </div>
     </body class="login-body">
-</html>
+</html> -->
