@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, flash, redirect, request, session, jsonify
+from flask import Flask, render_template, send_from_directory, abort
 from flask_behind_proxy import FlaskBehindProxy
 import sys,os
 
@@ -27,6 +27,14 @@ def library():
 @app.route('/output', methods=['GET'])
 def output():
     return render_template('output.html')
+
+
+@app.route('/download/<filename>')
+def download(filename):
+    try:
+        return send_from_directory('static/recordings', filename, as_attachment=True)
+    except FileNotFoundError:
+        abort(404)
 
 @app.route('/dashboard', methods=['GET'])
 def dashboard():
