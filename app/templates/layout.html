@@ -5,13 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF Pal - My Library</title>
     <link rel="stylesheet" href="../static/main.css">
+
+    <!--fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap" rel="stylesheet">
 </head>
 <body class="layout-body">
     <header class="layout-header">
-        <h1 class="layout">PDF Pal</h1>
+        <div class="flex">
+            <a href="/">
+                <img src="../static/logo.png" alt="PDF Parser Logo" class="logo-img">
+            </a>
+            <h1 class="layout-h1 kode-mono-header">PDF Parser</h1>
+        </div>
         <nav>
-            <a class="layout" href="./">Home</a>
-            <a class="layout" href="./login">Sign Out</a>
+            <button class="signup-button"> <a class="layout nav-link" href="./register">Sign Up</a></button>
+            <button class="signup-button"><a class="layout nav-link" href="./login">Login</a></button>
         </nav>
     </header>
     <div>
