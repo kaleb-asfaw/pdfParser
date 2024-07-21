@@ -4,6 +4,7 @@ from openai import OpenAI
 
 openai_key = os.getenv('OPENAI_KEY')
 
+
 if not openai_key:
     raise EnvironmentError("Environment variable for OpenAI key was not set")
 
