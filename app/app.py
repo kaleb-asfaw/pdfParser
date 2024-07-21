@@ -6,6 +6,7 @@ from flask import (Flask,
                    request, session,)
 from flask_behind_proxy import FlaskBehindProxy
 import sys,os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from func.parse import get_summary_from_upload
 
 SUMMARY_TEXT_DEFAULT = "Sorry, we couldn't find the summary text. Try uploading your file again."

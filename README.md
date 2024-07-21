@@ -2,20 +2,13 @@
 
 ## Overview
 
-Converts boring school readings into summaries and audio files
+Have a reading assignment and too busy to read? Want to efficiently absorb knowledge while multitasking? Input your reaading into our parser and receive your choice between an audiobook or detailed, TA-like summarization.
 
 ## Installation
 
-To get started with this project, follow these steps:
+The site is hosted on _______.
 
-1. clone the repo
-
-2. create a virtual environment
-
-3. install the dependencies from requirements.txt
-
-4. idk lelelelelelele
-
+1. TBT
    
 
 
