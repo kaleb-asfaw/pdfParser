@@ -226,17 +226,14 @@ html, body {
     position: relative;
 }
 
-.back-link:hover {
-    text-decoration: underline;
-}
 
 .container {
     display: flex;
     justify-content: center;
     /* flex-direction: column; */
+    
     align-items: center;
     width: 100%;
-    max-width: 400px;
     padding: 20px;
     box-sizing: border-box;
 }
@@ -249,6 +246,7 @@ html, body {
     width: 100%;
     box-sizing: border-box;
     text-align: center;
+    max-width: 400px;
 }
 
 h1 {
