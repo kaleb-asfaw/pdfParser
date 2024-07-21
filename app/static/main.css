@@ -1,5 +1,15 @@
 /* styling for layout.html */
 
+h3{
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: #365B6D;
+}
+
+h2, h5{
+    font-family:Arial, Helvetica, sans-serif;
+    color: #365B6D;
+}
+
 .inter-font {
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
@@ -76,11 +86,6 @@ nav a {
 
 
 
-
-h3 {
-    color: #365B6D;
-    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
-}
 
 .left-text {
     text-align: left;
@@ -400,35 +405,7 @@ input {
 }
 
 /* Styling for library.html (content, headers, folders, etc.) */
-.library-body {
-    margin: 0;
-    font-family: 'Roboto', sans-serif;
-    background-color: #f0f0f0;
-    color: #333;
-}
 
-.header {
-    background-color: #365B6D;
-    padding: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    color: #fff;
-}
-
-.header h1 {
-    margin: 0;
-}
-
-.header nav a {
-    margin-left: 1rem;
-    color: #fff;
-    text-decoration: none;
-}
-
-.header nav a:hover {
-    text-decoration: underline;
-}
 
 .back-link {
     display: inline-block;
@@ -446,6 +423,10 @@ input {
     transform: scale(1.1);
 }
 
+.left-margin {
+    margin-left: 4rem;
+}
+
 
 .library {
     display: flex;
@@ -456,18 +437,19 @@ input {
 }
 
 .folder {
-    background-color: #3f3f4e;
+    background-color: #fff;
     padding: 1rem;
     border-radius: 5px;
     width: 150px;
     text-align: center;
     cursor: pointer;
     transition: transform 0.2s, background-color 0.2s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .folder:hover {
     transform: translateY(-5px);
-    background-color: #52526e;
+    background-color:#d3d3d3;
 }
 
 .folder img {
@@ -475,9 +457,9 @@ input {
     height: auto;
 }
 
-.folder p {
+.folder h5 {
     margin: 0.5rem 0 0;
-    color: #fff;
+    color: #365B6D;
 }
 
 .modal {
