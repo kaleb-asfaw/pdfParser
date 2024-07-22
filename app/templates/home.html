@@ -1,11 +1,34 @@
 {% extends "layout.html" %}
 {% block content %}
-        <main>
-            <div>
-                <p>Transform your PDFs into audio summaries</p>
-                <button class="parse-button">Start Parsing</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Pal</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <div class="layout-body">
+        <header class="layout-header">
+            <div class="flex">
+                <img src="logo.png" alt="PDF Pal Logo" class="logo-img">
+                <h1 class="layout-h1">PDF Pal</h1>
             </div>
-        </main>
-        <footer>
-            <button class="login-button"><a href="login">Login</a></button>
+            <nav>
+                <a href="#" class="nav-link">Home</a>
+                <a href="#" class="nav-link">Features</a>
+                <a href="#" class="nav-link">Contact</a>
+            </nav>
+        </header>
+        
+        <section class="home-section">
+            <h2 class="kode-mono-header">Welcome to PDF Pal</h2>
+            <p class="inter-font">Transform your PDFs into audio summaries easily and efficiently.</p>
+            <button class="login-button">Login</button>
+            <button class="signup-button">Sign Up</button>
+        </section>
+    </div>
+</body>
+</html>
 {% endblock content %}

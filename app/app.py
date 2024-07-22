@@ -6,7 +6,7 @@ from flask import (Flask,
                    request, session,)
 from flask_behind_proxy import FlaskBehindProxy
 import sys,os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from func.parse import get_summary_from_upload
 
 SUMMARY_TEXT_DEFAULT = "Sorry, we couldn't find the summary text. Try uploading your file again."
@@ -27,38 +27,10 @@ def home():
 
 @app.route('/login', methods=['GET'])
 def login():
-    if request.method == 'POST':
-        login = request.form['login']
-        password = request.form['password']
-        
-        try:
-            user = findPasswordSalt(login)
-            if user and bcrypt.checkpw(password.encode('utf-8'), user['pwdhash'].encode('utf-8')):
-                session['user'] = login
-                return redirect(url_for('dashboard'))
-            else:
-                return 'Invalid credentials', 401
-        except Exception as e:
-            return f'An error occurred: {e}', 500
-            
     return render_template('login.html')
 
 @app.route('/register', methods=['GET'])
 def register():
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-        confirm_password = request.form['confirm-password']
-
-        if password != confirm_password:
-            return 'Passwords do not match', 400
-
-        try:
-            createUserEntry(email, password)
-            return redirect(url_for('login'))
-        except Exception as e:
-            return f'An error occurred: {e}', 500
-
     return render_template('register.html')
 
 

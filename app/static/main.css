@@ -526,3 +526,42 @@ input {
 }
 
 
+/* Home page */
+.home-section {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.home-section h2 {
+    color: #365B6D;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.home-section p {
+    color: #333;
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+}
+
+.login-button, .signup-button {
+    transition: filter 0.3s;
+    background-color: #365B6D;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+    border-radius: 20px;
+}
+
+.login-button:hover, .signup-button:hover {
+    filter: brightness(1.5);
+}
