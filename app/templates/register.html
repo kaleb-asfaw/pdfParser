@@ -5,64 +5,66 @@
     <div class="container">
         <div class="register-card">
             <h1>Register</h1>
-            <form method="post" action="/register">
+            <form id="register-form" method="POST" action="{{ url_for('register') }}">
                 <div class="input-group">
-                    <label for="login">Username</label>
-                    <input id="login" name="login" type="text" required minlength="5" maxlength="100"/>
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                    <small class="error-message" id="email-error"></small>
                 </div>
                 <div class="input-group">
                     <label for="password">Password</label>
-                    <input id="password" name="password" type="password" required minlength="8" maxlength="128"/>
-                    <input type="checkbox" onclick="toggleVisibility()">Show Password
-                    <div id="passwordInfo"></div>
-                    <script>
-                        var password = document.getElementById("password");
-                        var passwordInfo = document.getElementById("passwordInfo");
-
-                        function toggleVisibility() {
-                            if (password.type === "password") {
-                                password.type = "text";
-                            } else {
-                                password.type = "password";
-                            }
-                        }
-
-                        (function () {
-                            const options = {
-                                translations: zxcvbnts['language-en'].translations,
-                                graphs: zxcvbnts['language-common'].adjacencyGraphs,
-                                dictionary: {
-                                    ...zxcvbnts['language-common'].dictionary,
-                                    ...zxcvbnts['language-en'].dictionary,
-                                },
-                            }
-                            zxcvbnts.core.zxcvbnOptions.setOptions(options)
-                        })()
-
-                        password.addEventListener("keyup", onPasswordChange);
-
-                        function onPasswordChange() {
-                            const info = zxcvbnts.core.zxcvbn(password.value);
-                            const scoreMap = {
-                                0: 'too guessable: risky password',
-                                1: 'very guessable: protection from throttled online attacks',
-                                2: 'somewhat guessable: protection from unthrottled online attacks',
-                                3: 'safely unguessable: moderate protection from offline slow-hash scenario',
-                                4: 'very unguessable: strong protection from offline slow-hash scenario.'
-                            }
-                            const feedback = info.feedback ? info.feedback : {};
-                            const warning = feedback.warning || '';
-                            passwordInfo.innerText = 'Password score: ' + scoreMap[info.score] + ', ' + warning;
-                        }
-                    </script>
+                    <input type="password" id="password" name="password" required>
                 </div>
                 <div class="input-group">
                     <label for="confirm-password">Confirm Password</label>
                     <input type="password" id="confirm-password" name="confirm-password" required>
+                    <small class="error-message" id="password-error"></small>
                 </div>
                 <button type="submit" class="btn">Register</button>
             </form>
         </div>
     </div>
+    <script>
+        document.getElementById('register-form').addEventListener('submit', function(event) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const email = document.getElementById('email').value;
+            const emailError = document.getElementById('email-error');
+            const passwordError = document.getElementById('password-error');
+            let valid = true;
+
+            if (password !== confirmPassword) {
+                passwordError.textContent = 'Passwords do not match';
+                document.getElementById('confirm-password').classList.add('input-error');
+                valid = false;
+            } else {
+                passwordError.textContent = '';
+                document.getElementById('confirm-password').classList.remove('input-error');
+            }
+
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!regex.test(email)) {
+                emailError.textContent = 'Invalid email address';
+                document.getElementById('email').classList.add('input-error');
+                valid = false;
+            } else {
+                emailError.textContent = '';
+                document.getElementById('email').classList.remove('input-error');
+            }
+
+            if (!valid) {
+                event.preventDefault();
+            }
+        });
+    </script>
+    <style>
+        .input-error {
+            border-color: red;
+        }
+        .error-message {
+            color: red;
+            font-size: 0.8em;
+        }
+    </style>
 </body>
-{% endblock content %}
+{% endblock %}
