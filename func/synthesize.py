@@ -4,7 +4,6 @@ import os, base64, json
 
 credentials_base64 = os.getenv('GOOGLETTS_CREDENTIALS_BASE64')
 if not credentials_base64:
-    print(credentials_base64)
     raise EnvironmentError("Did not retrieve Google TTS key from the environment.")
 
 credentials_json = base64.b64decode(credentials_base64).decode('utf-8')
