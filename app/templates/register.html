@@ -1,58 +1,68 @@
 {% extends "layout.html" %}
 {% block content %}
 <body class="login-body">
-        <a href="/" class="back-link">← Back to home</a>
-        <div class="container">
-            <div class="register-card">
-                <h1>Register</h1>
-                <form>
-                    <div class="input-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="email">Password</label>
-                        <input type="password" id="password" name="password" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="confirm-password">Confirm Password</label>
-                        <input type="password" id="confirm-password" name="confirm-password" required>
-                    </div>
-                    <button type="submit" class="btn">Register</button>
-                </form>
-            </div>
-        </div>
-    </body class="login-body">
-{% endblock content %}
+    <a href="/" class="back-link">← Back to home</a>
+    <div class="container">
+        <div class="register-card">
+            <h1>Register</h1>
+            <form method="post" action="/register">
+                <div class="input-group">
+                    <label for="login">Username</label>
+                    <input id="login" name="login" type="text" required minlength="5" maxlength="100"/>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="password" required minlength="8" maxlength="128"/>
+                    <input type="checkbox" onclick="toggleVisibility()">Show Password
+                    <div id="passwordInfo"></div>
+                    <script>
+                        var password = document.getElementById("password");
+                        var passwordInfo = document.getElementById("passwordInfo");
 
-<!-- <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width", initial-scale=1.0">
-        <title>PDF Pal - Register</title>
-        <link rel="stylesheet" href="../static/main.css">
-    </head>
-    <body class="login-body">
-        <div class="container">
-            <div class="register-card">
-                <h1>Register</h1>
-                <form>
-                    <div class="input-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="email">Password</label>
-                        <input type="password" id="password" name="password" required>
-                    </div>
-                    <div class="input-group">
-                        <label for="confirm-password">Confirm Password</label>
-                        <input type="password" id="confirm-password" name="confirm-password" required>
-                    </div>
-                    <button type="submit" class="btn">Register</button>
-                </form>
-            </div>
+                        function toggleVisibility() {
+                            if (password.type === "password") {
+                                password.type = "text";
+                            } else {
+                                password.type = "password";
+                            }
+                        }
+
+                        (function () {
+                            const options = {
+                                translations: zxcvbnts['language-en'].translations,
+                                graphs: zxcvbnts['language-common'].adjacencyGraphs,
+                                dictionary: {
+                                    ...zxcvbnts['language-common'].dictionary,
+                                    ...zxcvbnts['language-en'].dictionary,
+                                },
+                            }
+                            zxcvbnts.core.zxcvbnOptions.setOptions(options)
+                        })()
+
+                        password.addEventListener("keyup", onPasswordChange);
+
+                        function onPasswordChange() {
+                            const info = zxcvbnts.core.zxcvbn(password.value);
+                            const scoreMap = {
+                                0: 'too guessable: risky password',
+                                1: 'very guessable: protection from throttled online attacks',
+                                2: 'somewhat guessable: protection from unthrottled online attacks',
+                                3: 'safely unguessable: moderate protection from offline slow-hash scenario',
+                                4: 'very unguessable: strong protection from offline slow-hash scenario.'
+                            }
+                            const feedback = info.feedback ? info.feedback : {};
+                            const warning = feedback.warning || '';
+                            passwordInfo.innerText = 'Password score: ' + scoreMap[info.score] + ', ' + warning;
+                        }
+                    </script>
+                </div>
+                <div class="input-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" name="confirm-password" required>
+                </div>
+                <button type="submit" class="btn">Register</button>
+            </form>
         </div>
-    </body class="login-body">
-</html> -->
+    </div>
+</body>
+{% endblock content %}
