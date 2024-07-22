@@ -7,9 +7,6 @@
 
         <div class="library" id="library">
             <!-- Folders will be dynamically inserted here -->
-            
-            <!-- <h5>Add Folder</h5> -->
-            <!-- <button onclick="renameFolder('${folderName}', this)">Rename</button> -->
             <div>
                 <img class="add-folder" src="../static/plus.png" alt="add folder" onclick="addFolder()">
                 <p>Add Folder</p>
@@ -35,19 +32,19 @@
             const folderName = `Untitled ${folderCount}`;
             const library = document.getElementById('library');
             const folder = document.createElement('div');
-            // folder.setAttribute('onclick', `openFolder('${folderName}')`);
             folder.className = 'folder';
             folder.innerHTML = `
-                <div class="menu" onclick="openFolder('${folderName}')">⋮</div>
-                <img src="../static/blue-folder.png" alt="Folder">
-                <h5 ondblclick="renameFolder('${folderName}', this)">${folderName}</h5>
-                
+                <div class="folder-content">
+                    <img src="../static/blue-folder.png" alt="Folder">
+                    <h5 ondblclick="renameFolder('${folderName}', this)">${folderName}</h5>
+                </div>
+                <div class="folder-menu">
+                    <button onclick="openFolder('${folderName}')">Open</button>
+                    <button onclick="renameFolder('${folderName}', this)">Rename</button>
+                    <button onclick="deleteFolder('${folderName}', this)">Delete</button>
+                </div>
             `;
-            // <button onclick="renameFolder('${folderName}', this)">Rename</button>
-            // Get the second to last child
             const secondToLastChild = library.children[library.children.length - 1];
-            
-            // Insert the new folder before the second to last child
             library.insertBefore(folder, secondToLastChild);
 
             audioFiles[folderName] = []; // Initialize empty array for audio files
@@ -65,19 +62,29 @@
         }
 
         function renameFolder(folderId, buttonElement) {
-            const newName = prompt('Enter new course name:', folderId);
+            const newName = prompt('Enter new folder name:', folderId);
             if (newName && newName !== folderId) {
-                const folderDiv = buttonElement.parentElement;
+                const folderDiv = buttonElement.closest('.folder');
 
-                // Set inner HTML to use new name
+                // Update folder name in HTML
                 const folderNameElement = folderDiv.querySelector('h5');
-                const folderMenu = folderDiv.querySelector('.menu');
                 folderNameElement.innerText = newName;
-                folderMenu.setAttribute('onclick', `openFolder('${newName}')`);
-                buttonElement.setAttribute('ondblclick', `renameFolder('${newName}', this)`);
+
+                // Update folder functions to use new name
+                folderDiv.querySelector('.folder-menu button:nth-child(1)').setAttribute('onclick', `openFolder('${newName}')`);
+                folderDiv.querySelector('.folder-menu button:nth-child(2)').setAttribute('onclick', `renameFolder('${newName}', this)`);
+                folderDiv.querySelector('.folder-menu button:nth-child(3)').setAttribute('onclick', `deleteFolder('${newName}', this)`);
 
                 // Update audioFiles keys
                 audioFiles[newName] = audioFiles[folderId];
+                delete audioFiles[folderId];
+            }
+        }
+
+        function deleteFolder(folderId, buttonElement) {
+            if (confirm(`Are you sure you want to delete folder ${folderId}?`)) {
+                const folderDiv = buttonElement.closest('.folder');
+                folderDiv.remove();
                 delete audioFiles[folderId];
             }
         }
@@ -121,7 +128,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             // Initialize audio files for existing folders
             for (let i = 1; i <= folderCount; i++) {
-                audioFiles[`untitled ${i}`] = [];
+                audioFiles[`Untitled ${i}`] = [];
             }
         });
     </script>
