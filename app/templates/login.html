@@ -5,32 +5,79 @@
     <div class="container">
         <div class="login-card">
             <h1>Login</h1>
-            <form method="post" action="/login">
+            <form id="login-form" method="POST" action="{{ url_for('login') }}">
                 <div class="input-group">
-                    <label for="login">Username</label>
-                    <input id="login" name="login" type="text" required minlength="5" maxlength="100">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                    <small class="error-message" id="email-error"></small>
                 </div>
                 <div class="input-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required minlength="8" maxlength="128">
-                    <input type="checkbox" onclick="toggleVisibility()">Show Password
-                    <script>
-                        function toggleVisibility() {
-                            var password = document.getElementById("password");
-                            if (password.type === "password") {
-                                password.type = "text";
-                            } else {
-                                password.type = "password";
-                            }
-                        }
-                    </script>
+                    <input type="password" id="password" name="password" required>
+                    <small class="error-message" id="password-error"></small>
                 </div>
+                <small class="error-message" id="credentials-error"></small>
                 <button type="submit" class="btn">Login</button>
                 <p class="small-text">
-                    Don't have an account? <a href="register">Register here.</a>
+                    Don't have an account? <a href="{{ url_for('register') }}">Register here.</a>
                 </p>
             </form>
         </div>
     </div>
+    <script>
+        document.getElementById('email').addEventListener('input', function() {
+            const email = this.value;
+            const emailError = document.getElementById('email-error');
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!regex.test(email)) {
+                emailError.textContent = 'Invalid email address';
+                this.classList.add('input-error');
+            } else {
+                emailError.textContent = '';
+                this.classList.remove('input-error');
+            }
+        });
+
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const emailError = document.getElementById('email-error');
+            const passwordError = document.getElementById('password-error');
+            const credentialsError = document.getElementById('credentials-error');
+            let valid = true;
+
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!regex.test(email)) {
+                emailError.textContent = 'Invalid email address';
+                document.getElementById('email').classList.add('input-error');
+                valid = false;
+            } else {
+                emailError.textContent = '';
+                document.getElementById('email').classList.remove('input-error');
+            }
+
+            if (password === '') {
+                passwordError.textContent = 'Password cannot be empty';
+                document.getElementById('password').classList.add('input-error');
+                valid = false;
+            } else {
+                passwordError.textContent = '';
+                document.getElementById('password').classList.remove('input-error');
+            }
+
+            if (!valid) {
+                event.preventDefault();
+            }
+        });
+    </script>
+    <style>
+        .input-error {
+            border-color: red;
+        }
+        .error-message {
+            color: red;
+            font-size: 0.8em;
+        }
+    </style>
 </body>
-{% endblock content %}
+{% endblock %}
