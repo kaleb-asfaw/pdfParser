@@ -51,14 +51,13 @@ def text_to_speech(input_file, output_file):
         print(f'Audio content written to file "{output_file}"')
 
 
-# same as text-to-speech but takes in a String and also automatically stores filename (user given) to func/recordings
-def make_mp3(text, filename):
+
+def make_mp3(text):
     """
     Converts text to speech and returns the MP3 audio content.
 
     Args:
     text (str): The text to be converted to speech.
-    filename (str): The name of the file to be saved (without extension).
 
     Returns:
     bytes: The MP3 audio content.
@@ -83,25 +82,22 @@ def make_mp3(text, filename):
         input=synthesis_input, voice=voice, audio_config=audio_config
     )
 
-    # Create the output directory
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    output_dir = os.path.join(script_dir, 'recordings')
-    os.makedirs(output_dir, exist_ok=True)
+    # # Create the output directory
+    # script_dir = os.path.dirname(os.path.abspath(__file__))
+    # output_dir = os.path.join(script_dir, 'recordings')
+    # os.makedirs(output_dir, exist_ok=True)
 
 
-    # Construct the full file path
-    output_file = os.path.join(output_dir, f"{filename}.mp3")
+    # # Construct the full file path
+    # output_file = os.path.join(output_dir, f"{filename}.mp3")
 
-    # Write the response to the output file
-    with open(output_file, "wb") as out:
-        out.write(response.audio_content)
-        print(f'Audio content written to file "{output_file}"')
+    # # Write the response to the output file
+    # with open(output_file, "wb") as out:
+    #     out.write(response.audio_content)
+    #     print(f'Audio content written to file "{output_file}"')
 
     return response.audio_content
 
-text = "Hello, this is a test."
-filename = "test_audio"
-make_mp3(text, filename)
 
 # list_voices()
 
