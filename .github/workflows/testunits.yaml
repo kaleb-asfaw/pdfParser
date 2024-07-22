@@ -23,4 +23,6 @@ jobs:
 
       - name: Flask Application unittests
         working-directory: ./test/app
+        env:
+          GOOGLETTS_CREDENTIALS_BASE64: ${{ secrets.GOOGLETTS_CREDENTIALS_BASE64 }}
         run: python3 app.py
