@@ -50,7 +50,7 @@ def upload():
     
     if file and file.filename.endswith('.pdf'):
         # put temp.pdf in /func/pdf_placeholder
-        filename = file.filename   # TODO: change to be unique for the user & time
+        filename = 'temp.pdf'   # TODO: change to be unique for the user & time
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(file_path)
         print('FILE UPLOADED SUCCESSFULLY: ', file_path)  # success message
