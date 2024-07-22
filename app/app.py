@@ -9,6 +9,8 @@ import sys,os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from func.parse import get_summary_from_upload
 from func.synthesize import make_mp3
+import bcrypt
+from app.db_module import find_user_by_email, create_user
 
 SUMMARY_TEXT_DEFAULT = "Sorry, we couldn't find the summary text. Try uploading your file again."
 
@@ -26,45 +28,43 @@ def home():
     session['summary_text'] = SUMMARY_TEXT_DEFAULT
     return render_template('home.html')
 
-@app.route('/login', methods=['GET'])
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        login = request.form['login']
-        password = request.form['password']
+        email = request.form['email']
+        password = request.form['password'].encode('utf-8')
         
-        try:
-            user = findPasswordSalt(login)
-            if user and bcrypt.checkpw(password.encode('utf-8'), user['pwdhash'].encode('utf-8')):
-                session['user'] = login
-                return redirect(url_for('dashboard'))
-            else:
-                return 'Invalid credentials', 401
-        except Exception as e:
-            return f'An error occurred: {e}', 500
-            
+        user = find_user_by_email(email)
+        if user and bcrypt.checkpw(password, user['password'].encode('utf-8')):
+            session['user'] = email
+            return redirect(url_for('dashboard'))
+        else:
+            error_message = 'Invalid credentials. Please try again.'
+            return render_template('login.html', error_message=error_message)
+
     return render_template('login.html')
 
-@app.route('/register', methods=['GET'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         email = request.form['email']
-        password = request.form['password']
-        confirm_password = request.form['confirm-password']
+        password = request.form['password'].encode('utf-8')
+        confirm_password = request.form['confirm-password'].encode('utf-8')
 
         if password != confirm_password:
             return 'Passwords do not match', 400
 
-        try:
-            createUserEntry(email, password)
-            return redirect(url_for('login'))
-        except Exception as e:
-            return f'An error occurred: {e}', 500
+        hashed_password = bcrypt.hashpw(password, bcrypt.gensalt()).decode('utf-8')
+        create_user(email, hashed_password)
+        return redirect(url_for('login'))
 
     return render_template('register.html')
 
 
 @app.route('/dashboard', methods=['GET'])
 def dashboard():
+    if 'user' not in session:
+        return redirect(url_for('login'))
     return render_template('dashboard.html')
 
 @app.route('/upload', methods=["POST"])
