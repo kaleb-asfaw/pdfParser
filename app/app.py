@@ -6,6 +6,7 @@ from flask import (Flask,
                    request, session,)
 from flask_behind_proxy import FlaskBehindProxy
 import sys,os
+import base64
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from func.parse import get_summary_from_upload
 from func.synthesize import make_mp3
@@ -89,7 +90,12 @@ def upload():
         new_filepath = rootpath + '/func/pdf/' + filename
         try:
             summary_text = get_summary_from_upload(new_filepath)
+            # Generate MP3 audio content
+            mp3_data = make_mp3(summary_text)
+            # Encode MP3 data in base64 and store in session
+            session['summary_audio'] = base64.b64encode(mp3_data).decode('utf-8')
             session['summary_text'] = summary_text
+            
         except ValueError as e:
             print('ERROR with getting summary text for upload: ', e)
         
@@ -109,8 +115,11 @@ def library():
 @app.route('/output', methods=['GET', 'POST'])
 def output():
     t = session.get('summary_text')
+    a = session.get('summary_audio', '')
+    if a:
+        a = base64.b64decode(a)
     session['summary_text'] = SUMMARY_TEXT_DEFAULT
-    return render_template('output.html', summary_text = t)
+    return render_template('output.html', summary_text = t, summary_audio = a)
 
 
 @app.route('/download/<filename>')
