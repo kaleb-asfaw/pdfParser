@@ -38,7 +38,8 @@ def login():
             session['user'] = email
             return redirect(url_for('dashboard'))
         else:
-            return 'Invalid credentials', 401
+            error_message = 'Invalid credentials. Please try again.'
+            return render_template('login.html', error_message=error_message)
 
     return render_template('login.html')
 
