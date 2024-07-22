@@ -7,7 +7,7 @@ jobs:
     env:
       FLASK_KEY: ${{ secrets.FLASK_KEY }}
       OPENAI_KEY: ${{ secrets.OPENAI_KEY }}
-      GOOGLETTS_CREDENTAILS_BASE64: ${{ secrets.GOOGLETTS_CREDENTAILS_BASE64 }}
+      GOOGLETTS_CREDENTAILS_BASE64: ${{ secrets.GOOGLETTS_CREDENTIALS_BASE64 }}
     steps:
       - uses: actions/checkout@v3
       
