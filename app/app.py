@@ -8,6 +8,7 @@ from flask_behind_proxy import FlaskBehindProxy
 import sys,os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from func.parse import get_summary_from_upload
+from func.synthesize import make_mp3
 import bcrypt
 from app.db_module import find_user_by_email, create_user
 
