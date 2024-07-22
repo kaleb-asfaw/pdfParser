@@ -6,7 +6,7 @@ from flask import (Flask,
                    request, session,)
 from flask_behind_proxy import FlaskBehindProxy
 import sys,os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from func.parse import get_summary_from_upload
 
 SUMMARY_TEXT_DEFAULT = "Sorry, we couldn't find the summary text. Try uploading your file again."
@@ -18,7 +18,7 @@ if not os.environ.get('FLASK_KEY'):
     app.config['SECRET_KEY'] = 'a5783ee1abf428d9a22445b69e1c1ab4'
 
 # configure upload folder location
-app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'func/pdf_placeholder')
+app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'func/pdf')
 
 @app.route('/', methods=['GET'])
 def home():
@@ -50,15 +50,18 @@ def upload():
     
     if file and file.filename.endswith('.pdf'):
         # put temp.pdf in /func/pdf_placeholder
-        filename = file.filename   # TODO: change to be unique for the user & time
+        filename = 'temp.pdf'   # TODO: change to be unique for the user & time
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(file_path)
         print('FILE UPLOADED SUCCESSFULLY: ', file_path)  # success message
 
         # call get_summary (TODO: add functionality to get audio)
-        new_filepath = 'func/pdf_holder/' + filename
-        summary_text = get_summary_from_upload(new_filepath)
-        session['summary_text'] = summary_text
+        new_filepath = 'pdf/' + filename
+        try:
+            summary_text = get_summary_from_upload(new_filepath)
+            session['summary_text'] = summary_text
+        except ValueError as e:
+            print('ERROR with getting summary text for upload: ', e)
         
         # Delete the file after processing
         os.remove(file_path)
