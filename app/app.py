@@ -49,13 +49,14 @@ def upload():
     
     if file and file.filename.endswith('.pdf'):
         # put temp.pdf in /func/pdf_placeholder
-        filename = 'temp.pdf' # TODO: change to be unique for the user
+        filename = file.filename   # TODO: change to be unique for the user & time
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(file_path)
         print('FILE UPLOADED SUCCESSFULLY: ', file_path)  # success message
 
         # call get_summary (TODO: add functionality to get audio)
-        summary_text = get_summary_from_upload(filename)
+        new_filepath = 'func/pdf_holder/' + filename
+        summary_text = get_summary_from_upload(new_filepath)
         session['summary_text'] = summary_text
         
         # Delete the file after processing

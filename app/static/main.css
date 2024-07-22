@@ -443,6 +443,25 @@ input {
     gap: 2rem;
     justify-content: center;
     padding: 1rem;
+    align-items: center;
+}
+
+
+
+.add-folder {
+    width: 70px;
+    height: 70px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.menu {
+    cursor: pointer;
+    font-size: 30px;
+    user-select: none;
+    position: absolute;
+    top: 5px;
+    right: 5px;
 }
 
 .folder {
@@ -451,7 +470,6 @@ input {
     border-radius: 5px;
     width: 150px;
     text-align: center;
-    cursor: pointer;
     transition: transform 0.2s, background-color 0.2s;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
