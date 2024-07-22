@@ -56,7 +56,8 @@ def upload():
         print('FILE UPLOADED SUCCESSFULLY: ', file_path)  # success message
 
         # call get_summary (TODO: add functionality to get audio)
-        new_filepath = 'pdf/' + filename
+        rootpath = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        new_filepath = rootpath + '/func/pdf/' + filename
         try:
             summary_text = get_summary_from_upload(new_filepath)
             session['summary_text'] = summary_text
