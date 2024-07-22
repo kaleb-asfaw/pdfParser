@@ -9,7 +9,7 @@ import sys,os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from func.parse import get_summary_from_upload
 import bcrypt
-from db_module import find_user_by_email, create_user
+from app.db_module import find_user_by_email, create_user
 
 SUMMARY_TEXT_DEFAULT = "Sorry, we couldn't find the summary text. Try uploading your file again."
 
