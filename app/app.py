@@ -134,8 +134,6 @@ def upload():
 
         try:
             summary_text = get_summary_from_upload(file_path)
-            print('here is the file path:')
-            print(file_path)
             mp3_data = make_mp3(summary_text)
             
             # Save MP3 file

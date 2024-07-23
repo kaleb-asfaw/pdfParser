@@ -1,14 +1,79 @@
 {% extends "layout_logged_in.html" %}
 {% block content %}
-<h2>Summary</h2>
-<p>{{ summary_text }}</p>
-{% if audio_filename %}
-    <h2>Audio Summary</h2>
-    <audio controls>
-        <source src="{{ url_for('download', filename=audio_filename) }}" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-    <a href="{{ url_for('download', filename=audio_filename) }}">Download Audio</a>
-{% endif %}
-{% endblock %}
 
+<a href="/dashboard" class="back-link">← Back to dashboard</a>
+
+    
+<div class="output-container">
+    <div class="audio-card">
+        <h3 class="left-align">Summary Audio</h3>
+        <div class="audio-controls">
+            
+            <audio id="audioPlayer" src="{{ url_for('download', filename=audio_filename) }}" controls>
+                Your browser does not support the audio element.
+            </audio>
+            <br>
+            <!-- <button class="audio-button" onclick="rewindAudio()">Rewind</button>
+            <button class="audio-button" onclick="forwardAudio()">Forward</button> -->
+            <div class="flex audio-container">
+                <img class ="audio-button" src="../static/rewind.png" alt="rewind 10 sec image" onclick="rewindAudio()">
+                <img class ="audio-button" src="../static/fast-forward.png" alt="fast forward 10 sec image" onclick="forwardAudio()">
+            </div>
+            <br><br>
+            <div class="icon-text-container">
+                <img src="../static/download.png" alt="Download Icon" onclick="downloadAudio()" class="download-button">
+                <span class="icon-text">Download Audio</span>
+            </div>
+            <div class="icon-text-container">
+                <img src="../static/blue-folder.png" alt="Save to My Library Icon" onclick="saveToLibrary()" class="send-button">
+                <span class="icon-text">Save to My Library</span>
+            </div>
+            <!-- <button onclick="saveToLibrary()">Save to Library</button> -->
+        </div>
+    </div>
+    <div class="output-text-card">
+        <h3>Summary Text</h3>
+        <div class="text-box">
+            <p>{{ summary_text }}</p>
+    </div>
+</div>
+
+<script>
+    const audioPlayer = document.getElementById('audioPlayer');
+
+    function playAudio() {
+        audioPlayer.play();
+    }
+
+    function pauseAudio() {
+        audioPlayer.pause();
+    }
+
+    function rewindAudio() {
+        audioPlayer.currentTime -= 10; // Rewind by 10 seconds
+    }
+
+    function forwardAudio() {
+        audioPlayer.currentTime += 10; // Forward by 10 seconds
+    }
+
+    function downloadAudio() {
+        const audioPlayer = document.getElementById('audioPlayer');
+        const audioSrc = audioPlayer.src; // Get the source URL
+
+        console.log(audioSrc);
+        const link = document.createElement('a');
+        link.href = audioSrc;
+        link.download = 'audio-file.mp3'; // Set the filename for download
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function saveToLibrary() {
+        // For this example, saving to library is simulated as a console log
+        console.log('Saved to library!');
+        alert('Audio saved to library!');
+    }
+</script>
+{% endblock content %}
