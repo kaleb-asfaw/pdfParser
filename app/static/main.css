@@ -452,18 +452,22 @@ input {
 
 .upload-section, 
 .library-section {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 500px;
+    height: 400px;
     text-align: center;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    font-size: 1.2em;
+    margin: 0 20px;
+    box-sizing: border-box;
 }
 
 .upload-section h2, 
 .library-section h2 {
-    margin-bottom: 20px;
-    font-size: 24px;
+    margin-bottom: 30px;
+    font-size: 28px;
     color: #2c3e50;
 }
 
@@ -639,4 +643,45 @@ input {
 
 #audio-list button:hover {
     text-decoration: underline;
+}
+
+/* Styling for dashboard.html (buttons, etc.) */
+.upload-section {
+    margin-bottom: 20px;
+}
+.upload-section input[type="file"] {
+    display: block;
+    margin: 20px auto;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    width: 80%;
+}
+.upload-section button {
+    background-color: #365B6D;
+    color: white;
+    padding: 15px 30px;
+    margin-top: 10px;
+    border: none; 
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1.2 em;
+}
+.upload-section button:hover {
+    background-color: #3498db;
+}
+.loading-spinner {
+    display: none;
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+ @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
