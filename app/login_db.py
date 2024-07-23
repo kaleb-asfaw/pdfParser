@@ -1,6 +1,8 @@
 import sqlite3
 
 def get_db_connection():
+    create_users_table()
+    create_files_table()
     conn = sqlite3.connect('database.db')
     conn.row_factory = sqlite3.Row
     return conn
@@ -81,7 +83,7 @@ def print_table_contents():
 
 
 # clear_files_table()
-print_table_contents()
+# print_table_contents()
 
 # create_users_table()
 # create_files_table()
