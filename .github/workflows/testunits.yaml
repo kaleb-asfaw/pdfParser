@@ -21,8 +21,8 @@ jobs:
           python -m pip install --upgrade pip pytest
           pip install -r requirements.txt
 
-      # - name: Flask Application unittests
-      #   working-directory: ./test/app
-      #   env:
-      #     GOOGLETTS_CREDENTIALS_BASE64: ${{ secrets.GOOGLETTS_CREDENTIALS_BASE64 }}
-      #   run: python3 app.py
+      - name: Flask Application unittests
+        working-directory: ./test/app
+        env:
+          GOOGLETTS_CREDENTIALS_BASE64: ${{ secrets.GOOGLETTS_CREDENTIALS_BASE64 }}
+        run: python3 app.py
