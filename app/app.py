@@ -131,9 +131,9 @@ def upload():
         try:
             summary_text = get_summary_from_upload(new_filepath)
             # Generate MP3 audio content
-            mp3_data = make_mp3(summary_text)
+            # mp3_data = make_mp3(summary_text)
             # Encode MP3 data in base64 and store in session
-            session['summary_audio'] = base64.b64encode(mp3_data).decode('utf-8')
+            # session['summary_audio'] = base64.b64encode(mp3_data).decode('utf-8')
             session['summary_text'] = summary_text
             
         except ValueError as e:
