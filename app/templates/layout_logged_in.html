@@ -13,22 +13,37 @@
 </head>
 <body class="layout-body">
     <header class="layout-header">
-        <div class="flex">
-            <a href="/dashboard">
-                <img src="../static/logo.png" alt="PDF Parser Logo" class="logo-img">
-            </a>
-            <a style="text-decoration: none;" href="/dashboard"><h1 class="layout-h1 kode-mono-header">PDF Parser</h1></a>
-        </div>
-        <nav>
-            <p>Hello, {{ current_user.id }}</p>
-            <button class="signup-button"> <a class="layout nav-link" href="./dashboard">Dashboard</a></button>
-            <button class="signup-button"> <a class="layout nav-link" href="./library">My Library</a></button>
-            <button class="signup-button"><a class="layout nav-link" href="./logout">Log out</a></button>
-        </nav>
-    </header>
+        
 
+            <div class="flex">
+                <a href="/dashboard">
+                    <img src="../static/logo.png" alt="PDF Parser Logo" class="logo-img">
+                </a>
+                <a style="text-decoration: none;" href="/dashboard"><h1 class="layout-h1 kode-mono-header">PDF Parser</h1></a>
+            </div>
+
+            <p>Hello, <em>{{ current_user.id }}</em>!</p>
+            <!-- <div class="menu-icon" onclick="toggleMenu()">&#9776;</div> -->
+
+
+            <nav class="nav-links">
+                <button class="signup-button"> <a class="layout nav-link" href="./dashboard">Dashboard</a></button>
+                <button class="signup-button"> <a class="layout nav-link" href="./library">My Library</a></button>
+                <button class="signup-button"><a class="layout nav-link" href="./logout">Log out</a></button>
+            </nav>
+            
+
+    </header>
+    
         {% block content %}{% endblock %}
 
     
 </body>
 </html>
+
+<script>
+    function toggleMenu() {
+        const navLinks = document.querySelector('.nav-links');
+        navLinks.classList.toggle('active');
+    }
+</script>
