@@ -167,7 +167,7 @@ def get_summary_from_upload(file, start=None, end=None, focus=None):
 if __name__ == "__main__":
 
     print(os.getcwd())
-    file_path = "func/recordings/maudirac07@gmail.com/1721716181_La Boetie.pdf"  # Replace with your actual file path
+    file_path = "func/recordings/maudirac07@gmail.com/Perfect_Proof_of_Islam_and_Absolute_Islamic_Topics.pdf"
     if not os.path.isfile(file_path):
         raise FileNotFoundError(f"The file path {file_path} does not exist.")
     try:
