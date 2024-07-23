@@ -163,8 +163,19 @@ def get_summary_from_upload(file, start=None, end=None, focus=None):
     TODO: make this function work
     """
     return get_summary(get_jumbled_text(file, start, end), focus)
-    
+
 if __name__ == "__main__":
-    file = "func/pdf/Quant guide (SBC).pdf"
-    start, end = 5, 8
-    print(get_summary(get_jumbled_text(file)))
+
+    print(os.getcwd())
+    file_path = "func/recordings/maudirac07@gmail.com/1721716181_La Boetie.pdf"  # Replace with your actual file path
+    if not os.path.isfile(file_path):
+        raise FileNotFoundError(f"The file path {file_path} does not exist.")
+    try:
+        print(get_summary(get_jumbled_text(file_path)))
+    except Exception as e:
+        print("An error occurred:", e)
+
+# if __name__ == "__main__":
+#     file = "func/pdf/Quant guide (SBC).pdf"
+#     start, end = 5, 8
+#     print(get_summary(get_jumbled_text(file)))

@@ -8,6 +8,7 @@ from flask_behind_proxy import FlaskBehindProxy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import sys,os
 import base64
+import time
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from func.parse import get_summary_from_upload
 from func.synthesize import make_mp3
@@ -25,7 +26,7 @@ if not os.environ.get('FLASK_KEY'):
     app.config['SECRET_KEY'] = 'a5783ee1abf428d9a22445b69e1c1ab4'
 
 # configure upload folder location
-app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'func/pdf')
+app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'func/recordings')
 
 
 login_manager = LoginManager()
@@ -33,8 +34,10 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 class User(UserMixin):
-    def __init__(self, email):
+    def __init__(self, id, email):
+        self.id = id
         self.id = email
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -46,7 +49,7 @@ def load_user(user_id):
 
     if user is None:
         return None
-    return User(user['email'])
+    return User(user['id'], user['email'])
     
 
 @app.route('/', methods=['GET'])
@@ -66,7 +69,7 @@ def login():
         
         user = find_user_by_email(email)
         if user and bcrypt.checkpw(password, user['password'].encode('utf-8')):
-            user_obj = User(email)
+            user_obj = User(user['id'], email)
             login_user(user_obj)
             return redirect(url_for('dashboard'))
         else:
@@ -94,8 +97,10 @@ def register():
             return 'Passwords do not match', 400
 
         hashed_password = bcrypt.hashpw(password, bcrypt.gensalt()).decode('utf-8')
-        create_user(email, hashed_password)
-        return redirect(url_for('login'))
+        user_id = create_user(email, hashed_password)
+        user_obj = User(user_id, email)
+        login_user(user_obj)
+        return redirect(url_for('dashboard'))
 
     return render_template('register.html')
 
@@ -119,56 +124,73 @@ def upload():
         return "No selected file"
     
     if file and file.filename.endswith('.pdf'):
-        # put temp.pdf in /func/pdf_placeholder
-        filename = 'temp.pdf'   # TODO: change to be unique for the user & time
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        user_folder = os.path.join(app.config['UPLOAD_FOLDER'], str(current_user.id))
+        os.makedirs(user_folder, exist_ok=True)
+        
+        filename = f'{int(time.time())}_{file.filename}'  # unique filename using timestamp
+        file_path = os.path.join(user_folder, filename)
         file.save(file_path)
-        print('FILE UPLOADED SUCCESSFULLY: ', file_path)  # success message
+        print('FILE UPLOADED SUCCESSFULLY: ', file_path)
 
-        # call get_summary (TODO: add functionality to get audio)
-        rootpath = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        new_filepath = rootpath + '/func/pdf/' + filename
         try:
-            summary_text = get_summary_from_upload(new_filepath)
-            # Generate MP3 audio content
+            summary_text = get_summary_from_upload(file_path)
+            print('here is the file path:')
+            print(file_path)
             mp3_data = make_mp3(summary_text)
-            # Encode MP3 data in base64 and store in session
-            session['summary_audio'] = base64.b64encode(mp3_data).decode('utf-8')
-            session['summary_text'] = summary_text
+            
+            # Save MP3 file
+            mp3_filename = f'{int(time.time())}.mp3'
+            mp3_path = os.path.join(user_folder, mp3_filename)
+            with open(mp3_path, 'wb') as mp3_file:
+                mp3_file.write(mp3_data)
+            
+            # Save file paths to the database
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO user_files (user_id, pdf_path, mp3_path, summary_text) VALUES (?, ?, ?, ?)",
+                           (current_user.id, file_path, mp3_path, summary_text))
+            conn.commit()
+            conn.close()
             
         except ValueError as e:
             print('ERROR with getting summary text for upload: ', e)
-        
-        # Delete the file after processing
-        os.remove(file_path)
-        print('FILE DELETED SUCCESSFULLY: ', file_path)  # success message
-        
-        # send text to /output
+
         return redirect(url_for('output'))
     else:
         return "Invalid file type. Only PDFs are allowed."
+
 
 @app.route('/library', methods=['GET'])
 @login_required
 def library():
     return render_template('library.html')
 
-@app.route('/output', methods=['GET', 'POST'])
+@app.route('/output', methods=['GET'])
 @login_required
 def output():
-    t = session.get('summary_text')
-    a = session.get('summary_audio', '')
-    if a:
-        a = base64.b64decode(a)
-    session['summary_text'] = SUMMARY_TEXT_DEFAULT
-    return render_template('output.html', summary_text = t, summary_audio = a)
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM user_files WHERE user_id = ? ORDER BY id DESC LIMIT 1", (current_user.id,))
+    user_file = cursor.fetchone()
+    conn.close()
+    
+    if user_file:
+        summary_text = user_file['summary_text']
+        audio_filename = os.path.basename(user_file['mp3_path'])
+    else:
+        summary_text = SUMMARY_TEXT_DEFAULT
+        audio_filename = None
+
+    return render_template('output.html', summary_text=summary_text, audio_filename=audio_filename)
+
 
 
 @app.route('/download/<filename>')
 @login_required
 def download(filename):
+    user_folder = os.path.join(app.config['UPLOAD_FOLDER'], str(current_user.id))
     try:
-        return send_from_directory('static/recordings', filename, as_attachment=True)
+        return send_from_directory(user_folder, filename, as_attachment=True)
     except FileNotFoundError:
         abort(404)
 
