@@ -1,5 +1,29 @@
 /* styling for layout.html */
 
+/* Responsive styling */
+/* @media (max-width: 1182px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .menu-icon {
+        display: block;
+    }
+}
+
+.menu-icon {
+    display: none;
+    font-size: 28px;
+    color: #365B6D;
+    cursor: pointer;
+} */
+
 h3{
     font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     color: #365B6D;
@@ -103,6 +127,49 @@ nav a {
     font-size: 1.5rem;
     
 }
+
+
+/* styling for home.html */
+.home-container {
+    justify-content: center;
+    width: 70%;
+    margin: auto;
+    text-align: center;
+    align-items: center;
+}
+
+.description {
+    margin-top: 60px;
+    font-size: 50px;
+    font-weight: 400;
+}
+
+.intro-text{
+    font-size: 25px;
+}
+
+.get-started {
+    transition: filter 0.2s transform 0.2s;
+    font-size: 25px;
+}
+
+.get-started:hover {
+    filter: brightness(1.5);
+    transform: scale(1.1);
+}
+
+.home-img {
+    width: 1000px; 
+    height: auto;
+}
+
+footer {
+    justify-content: center;
+    text-align: center;
+    width: 80%;
+    margin: auto;
+}
+
 
 /* styling for output.html */
 .left-side {
