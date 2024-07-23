@@ -640,3 +640,39 @@ input {
 #audio-list button:hover {
     text-decoration: underline;
 }
+
+/* Styling for dashboard.html (buttons, etc.) */
+.upload-section {
+    margin-bottom: 20px;
+}
+.upload-section input[type="file"] {
+    display: block;
+    margin-bottom: 10px;
+}
+.upload-section button {
+    background-color: #365B6D;
+    color: white;
+    padding: 10px 20px;
+    margin-top: 10px;
+    border: none; 
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+.upload-section button:hover {
+    background-color: #3498db;
+}
+.loading-spinner {
+    display: none;
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

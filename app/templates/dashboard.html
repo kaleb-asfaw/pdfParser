@@ -1,28 +1,35 @@
 {% extends "layout_logged_in.html" %}
 {% block content %}
-        <div class="content">
-            <div class="upload-section">
-                <h2>Upload a PDF</h2>
-                <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
-                    <!-- <input type="file" id="pdf-upload" accept="application/pdf" hidden> -->
-                    <input type="file" name="file" accept="application/pdf" required>
-                    <img src="../static/icons8-upload-file-48.png" alt="Upload PDF" onclick="submitForm()">
-                </form>
-            <div id="upload-status"></div>
-        </div>
-        <div class="library-section">
-            <h2>My Library</h2>
-            <a href="/library">
-                <img src="../static/icons8-folder-48.png" alt="My Library">
-            </a>
+<style>
+    .content {
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-start;
+        padding-top: 120px;
+    }
+</style>
+<div class="content">
+    <div class="upload-section">
+        <h2>Upload a PDF</h2>
+        <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept="application/pdf" required>
+            <button type="button" onclick="submitForm()">Start Generating</button>
+        </form>
+        <div id="upload-status">
+            <div class="loading-spinner" id="loadingSpinner"></div>
         </div>
     </div>
-    </body>
-</html>
-
+    <div class="library-section">
+        <h2>My Library</h2>
+        <a href="/library">
+            <img src="../static/blue-folder.png" alt="My Library">
+        </a>
+    </div>
+</div>
 <script>
     function submitForm() {
         document.getElementById('uploadForm').submit();
+        document.getElementById('loadingSpinner').style.display = 'block';
     }
 </script>
 {% endblock content %}
