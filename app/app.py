@@ -7,6 +7,7 @@ from flask import (Flask,
 from flask_behind_proxy import FlaskBehindProxy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import sys,os, base64, time, markdown2
+import git
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from func.parse import get_summary_from_upload
 from func.synthesize import make_mp3
@@ -195,6 +196,15 @@ def download(filename):
     except FileNotFoundError:
         abort(404)
 
+@app.route("/update_server", methods=['POST'])
+def webhook():
+    if request.method == 'POST':
+        repo = git.Repo('/home/pdfPal/pdfParser')
+        origin = repo.remotes.origin
+        origin.pull()
+        return 'Updated PythonAnywhere successfully', 200
+    else:
+        return 'Wrong event type', 400
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")
