@@ -1,12 +1,7 @@
-from flask import (Flask, 
-                   render_template, 
-                   send_from_directory, 
-                   abort, 
-                   redirect, url_for,
-                   request, session,)
+from flask import (Flask, render_template, send_from_directory, abort, redirect, url_for, request, session)
 from flask_behind_proxy import FlaskBehindProxy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-import sys,os, base64, time, markdown2
+import sys, os, base64, time, markdown2
 import git
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from func.parse import get_summary_from_upload
@@ -17,8 +12,6 @@ from app.login_db import find_user_by_email, create_user, get_db_connection
 
 SUMMARY_TEXT_DEFAULT = "Sorry, we couldn't find the summary text. Try uploading your file again."
 
-
-
 app = Flask(__name__)
 proxied = FlaskBehindProxy(app)
 app.config['SECRET_KEY'] = os.environ.get('FLASK_KEY')
@@ -28,7 +21,6 @@ if not os.environ.get('FLASK_KEY'):
 # configure upload folder location
 app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'func/recordings')
 
-
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
@@ -36,21 +28,19 @@ login_manager.login_view = 'login'
 class User(UserMixin):
     def __init__(self, id, email):
         self.id = id
-        self.id = email
-
+        self.email = email
 
 @login_manager.user_loader
 def load_user(user_id):
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM users WHERE email = ?", (user_id,))
+    cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
     user = cursor.fetchone()
     conn.close()
 
     if user is None:
         return None
     return User(user['id'], user['email'])
-    
 
 @app.route('/', methods=['GET'])
 def home():
@@ -95,6 +85,10 @@ def register():
 
         if password != confirm_password:
             return 'Passwords do not match', 400
+        
+        user = find_user_by_email(email)
+        if user:
+            return 'User already exists', 400
 
         hashed_password = bcrypt.hashpw(password, bcrypt.gensalt()).decode('utf-8')
         user_id = create_user(email, hashed_password)
@@ -104,13 +98,11 @@ def register():
 
     return render_template('register.html')
 
-
 @app.route('/dashboard', methods=['GET'])
 @login_required
 def dashboard():
-    if 'user' not in session:
-        return redirect(url_for('login'))
-    return render_template('dashboard.html')
+    user_email = current_user.email
+    return render_template('dashboard.html', user_email=user_email)
 
 @app.route('/upload', methods=["POST"])
 @login_required
@@ -161,7 +153,6 @@ def upload():
     else:
         return "Invalid file type. Only PDFs are allowed."
 
-
 @app.route('/library', methods=['GET'])
 @login_required
 def library():
@@ -184,8 +175,6 @@ def output():
         audio_filename = None
 
     return render_template('output.html', summary_text=summary_text, audio_filename=audio_filename)
-
-
 
 @app.route('/download/<filename>')
 @login_required
