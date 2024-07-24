@@ -7,5 +7,6 @@ wordninja==2.0.0
 google-cloud-texttospeech==2.16.4
 openai==1.35.13
 bcrypt==3.2.0
+markdown2==2.5.0
+bs4==0.0.2
 # import time
-# 
