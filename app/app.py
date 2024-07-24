@@ -6,13 +6,12 @@ from flask import (Flask,
                    request, session,)
 from flask_behind_proxy import FlaskBehindProxy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-import sys,os
-import base64
-import time
+import sys,os, base64, time, markdown2
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from func.parse import get_summary_from_upload
 from func.synthesize import make_mp3
 import bcrypt
+from bs4 import BeautifulSoup
 from app.login_db import find_user_by_email, create_user, get_db_connection
 
 SUMMARY_TEXT_DEFAULT = "Sorry, we couldn't find the summary text. Try uploading your file again."
@@ -134,8 +133,12 @@ def upload():
 
         try:
             summary_text = get_summary_from_upload(file_path)
-            mp3_data = make_mp3(summary_text)
-            
+            # takes out markdown for text-to-speech
+            html_str = markdown2.markdown(summary_text)
+            soup = BeautifulSoup(html_str, 'html.parser')
+            plain_text = soup.get_text()
+            print(plain_text)
+            mp3_data = make_mp3(plain_text)
             # Save MP3 file
             mp3_filename = f'{int(time.time())}.mp3'
             mp3_path = os.path.join(user_folder, mp3_filename)
@@ -173,10 +176,10 @@ def output():
     conn.close()
     
     if user_file:
-        summary_text = user_file['summary_text']
+        summary_text = markdown2.markdown(user_file['summary_text'])
         audio_filename = os.path.basename(user_file['mp3_path'])
     else:
-        summary_text = SUMMARY_TEXT_DEFAULT
+        summary_text =  markdown2.markdown(SUMMARY_TEXT_DEFAULT)
         audio_filename = None
 
     return render_template('output.html', summary_text=summary_text, audio_filename=audio_filename)

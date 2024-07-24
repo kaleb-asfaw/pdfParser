@@ -81,8 +81,8 @@ def print_table_contents():
 
 
 # clear_files_table()
-print_table_contents()
+# print_table_contents()
 
-# create_users_table()
-# create_files_table()
+create_users_table()
+create_files_table()
 
