@@ -8,7 +8,7 @@ from func.parse import get_summary_from_upload
 from func.synthesize import make_mp3
 import bcrypt
 from bs4 import BeautifulSoup
-from app.login_db import find_user_by_email, create_user, get_db_connection
+from app.login_db import find_user_by_email, create_user, get_db_connection, get_pdf_file_paths, find_user_id_by_email
 
 SUMMARY_TEXT_DEFAULT = "Sorry, we couldn't find the summary text. Try uploading your file again."
 
@@ -130,7 +130,7 @@ def upload():
             html_str = markdown2.markdown(summary_text)
             soup = BeautifulSoup(html_str, 'html.parser')
             plain_text = soup.get_text()
-            print(plain_text)
+            #print(plain_text)
             mp3_data = make_mp3(plain_text)
             # Save MP3 file
             mp3_filename = f'{int(time.time())}.mp3'
@@ -156,11 +156,22 @@ def upload():
 @app.route('/library', methods=['GET'])
 @login_required
 def library():
-    return render_template('library.html')
+    # display all libraries for this user
+    # db
 
-@app.route('/output', methods=['GET'])
+    user_id = find_user_id_by_email(current_user.email)
+    pdf_files = get_pdf_file_paths(user_id)
+
+    return render_template('library.html', pdf_files=pdf_files)
+
+@app.route('/output', methods=['GET', 'POST'])
 @login_required
 def output():
+
+    pdf_name = request.args.get('pdf_name')
+    if pdf_name:
+        return 'I GOT A PDF'
+    
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM user_files WHERE user_id = ? ORDER BY id DESC LIMIT 1", (current_user.id,))

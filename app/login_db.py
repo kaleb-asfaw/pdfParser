@@ -13,6 +13,12 @@ def find_user_by_email(email):
     conn.close()
     return user
 
+def find_user_id_by_email(email):
+    conn = get_db_connection()
+    id = conn.execute('SELECT id FROM users WHERE email = ?', (email,)).fetchone()
+    conn.close()
+    return id[0]
+
 def create_user(email, password):
     conn = get_db_connection()
     conn.execute('INSERT INTO users (email, password) VALUES (?, ?)', (email, password))
@@ -39,6 +45,14 @@ def create_files_table():
         FOREIGN KEY (user_id) REFERENCES users(id)
     )''')
     conn.close()
+
+def get_pdf_file_paths(user_id):
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute("SELECT pdf_path FROM user_files WHERE user_id=?", (user_id,))
+    pdf_files = [row[0] for row in cursor.fetchall()]
+    conn.close()
+    return pdf_files
 
 def clear_files_table():
     """
@@ -83,8 +97,11 @@ def print_table_contents():
 
 
 # clear_files_table()
-# print_table_contents()
 
-create_users_table()
-create_files_table()
+
+# create_users_table()
+# create_files_table()
+
+
+
 

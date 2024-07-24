@@ -1,3 +1,5 @@
+<!-- LIBRARY WITH FOLDERS(NOT FUNCTIONAL..........:( -->
+
 {% extends "layout_logged_in.html" %}
 {% block content %}
     <main>
@@ -6,53 +8,22 @@
         <h2 class="left-margin">My Library</h2>
 
         <div class="library" id="library">
-            {% for pdf_name in pdf_files %}
-                <div class="file-card" onClick="window.location.href='/output?file={{ pdf_name }}'"> <!--?file={{ pdf_name }}-->
-                    {{ pdf_name }}
-                </div>
-            {% endfor %}
+            <!-- Folders will be dynamically inserted here -->
+            <div>
+                <img class="add-folder" src="../static/plus.png" alt="add folder" onclick="addFolder()">
+                <p>Add Folder</p>
+            </div>
         </div>
            
     </main>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- <div id="modal" class="modal">
+    <div id="modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
             <h3 id="modal-title"></h3>
             <input type="file" id="audio-upload" accept="audio/*" multiple>
             <ul id="audio-list"></ul>
         </div>
-    </div> -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    </div>
 
     <script>
         let folderCount = 0; // Start with 0 folders
