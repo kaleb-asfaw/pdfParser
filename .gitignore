@@ -9,6 +9,6 @@ __pycache__/
 # for testing of TTS service
 recordings/
 text_files/
-*.json
+credentials.json
 *.mp3
 *.wav
