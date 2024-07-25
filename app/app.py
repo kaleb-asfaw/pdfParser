@@ -1,4 +1,4 @@
-from flask import (Flask, render_template, send_from_directory, abort, redirect, url_for, request, session)
+from flask import (Flask, render_template, send_from_directory, abort, redirect, url_for, request, session, jsonify)
 from flask_behind_proxy import FlaskBehindProxy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import sys, os, base64, time, markdown2
@@ -8,9 +8,11 @@ from func.parse import get_summary_from_upload
 from func.synthesize import make_mp3
 import bcrypt
 from bs4 import BeautifulSoup
-from app.login_db import find_user_by_email, create_user, get_db_connection
+from app.login_db import find_user_by_email, create_user, get_db_connection, get_pdf_file_paths, find_user_id_by_email
 
 SUMMARY_TEXT_DEFAULT = "Sorry, we couldn't find the summary text. Try uploading your file again."
+AUDIO_DIRECTORY = '/Users/kaysweet/Documents/GitHub/pdfParser/func/recordings'
+
 
 app = Flask(__name__)
 proxied = FlaskBehindProxy(app)
@@ -130,7 +132,7 @@ def upload():
             html_str = markdown2.markdown(summary_text)
             soup = BeautifulSoup(html_str, 'html.parser')
             plain_text = soup.get_text()
-            print(plain_text)
+            #print(plain_text)
             mp3_data = make_mp3(plain_text)
             # Save MP3 file
             mp3_filename = f'{int(time.time())}.mp3'
@@ -152,15 +154,65 @@ def upload():
         return redirect(url_for('output'))
     else:
         return "Invalid file type. Only PDFs are allowed."
+    
+
 
 @app.route('/library', methods=['GET'])
 @login_required
 def library():
-    return render_template('library.html')
+    # display all libraries for this user
 
-@app.route('/output', methods=['GET'])
+    user_id = find_user_id_by_email(current_user.email)
+    pdf_files = get_pdf_file_paths(user_id)
+    pdf_names = []
+
+    if pdf_files:
+        pdf_path =  os.path.dirname(pdf_files[0]) + '/'
+        for path in pdf_files:
+            pdf_names.append(os.path.basename(path))
+    else:
+        pass # what to do with pdf path?
+
+    return render_template('library.html', pdf_names=pdf_names, pdf_path=pdf_path)
+
+
+
+@app.route('/get_file_data', methods=['GET'])
+@login_required
+def get_file_data():
+    pdf_name = request.args.get('pdf_name')
+    base_path = request.args.get('base_path')
+
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM user_files WHERE user_id = ? AND pdf_path = ? LIMIT 1", 
+                   (current_user.id, base_path + pdf_name))
+    user_file = cursor.fetchone()
+    conn.close()
+    print('USER FILE', current_user.id)
+    
+    if user_file:
+        data = {
+            'pdf_name': pdf_name,
+            'summary_text': markdown2.markdown(user_file['summary_text']),
+            'audio_filename': os.path.basename(user_file['mp3_path']),
+        }
+    else:
+        data = {
+            'pdf_name': '',
+            'summary_text': '',
+            'audio_filename': None
+        }
+
+    print('DATA', data)
+
+    return jsonify(data)
+
+@app.route('/output', methods=['GET', 'POST'])
 @login_required
 def output():
+    
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM user_files WHERE user_id = ? ORDER BY id DESC LIMIT 1", (current_user.id,))
@@ -197,3 +249,4 @@ def webhook():
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")
+    
