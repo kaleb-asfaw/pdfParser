@@ -1,14 +1,16 @@
 {% extends "layout_logged_out.html" %}
 {% block content %}
             <div class="home-container">
-                <h3 class="description">Transform your PDFs into audio summaries</h3>
-                <p class="intro-text">Have a reading assignment and too busy to read? Want to efficiently absorb knowledge while multitasking? Input your reading into our parser and receive your choice between an audiobook or detailed, TA-like summarization.</p>
-                <img src="../static/home-graphic.png" alt="pdf to audio" class="home-img">
-                <a style="text-decoration: none;" href="/login"><h5 class="get-started">Login to get started.</h5></a>
+                <div class="home-card">
+                    <h3 class="description">Transform your PDFs into audio summaries</h3>
+                    <p class="intro-text">Have a reading assignment and too busy to read? Want to efficiently absorb knowledge while multitasking? Input your reading into our parser and receive your choice between an audiobook or detailed, TA-like summarization.</p>
+                    <img src="../static/home-graphic.png" alt="pdf to audio" class="home-img">
+                </div>
+                <a style="text-decoration: none;" href="/login"><h5 class="get-started"><u>Login</u> to get started.</h5></a>
             </div>
 
-            <footer>
+            <!-- <footer>
                 <a href="https://github.com/kaleb-asfaw/pdfParser">Source code</a>
-            </footer>
+            </footer> -->
             
 {% endblock content %}
