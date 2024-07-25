@@ -132,10 +132,29 @@ nav a {
 /* styling for home.html */
 .home-container {
     justify-content: center;
-    width: 70%;
+    width: 90%;
     margin: auto;
     text-align: center;
     align-items: center;
+}
+
+.home-card {
+    justify-content: center;
+
+    margin: auto;
+    text-align: center;
+    align-items: center;
+
+    background-color: #fff;
+    padding: 40px;
+    padding-top: 20px;;
+    margin: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    box-sizing: border-box;
+    /* width: 80vw; 
+    height: 70vh; */
 }
 
 .description {
@@ -252,6 +271,8 @@ footer {
     width: 65vw; 
     height: 65vh;
 }
+
+
 
 .output-text-card{
     overflow: auto;
@@ -471,16 +492,22 @@ input {
     color: #2c3e50;
 }
 
-.upload-icon img, 
+.upload-icon, .upload-icon img, 
 .library-section img {
-    width: 100px;
-    height: 100px;
+    width: 150px;
+    height: 150px;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: transform 0.2s filter 0.2s;
 }
 
 .upload-icon img:hover, 
 .library-section img:hover {
+    transform: scale(1.1);
+    filter: brightness(1.5);
+}
+
+.upload-icon:hover {
+    filter: brightness(1.5);
     transform: scale(1.1);
 }
 
@@ -517,6 +544,8 @@ input {
     align-items: center;
 }
 
+
+
 .file-card {
     background-color: #fff;
     padding: 20px;
@@ -532,7 +561,7 @@ input {
 }
 
 .file-card:hover {
-    background-color: #a3cce7;
+    background-color: #d4ebf7;
     transform: scale(1.1);
 }
 
@@ -625,11 +654,20 @@ input {
 .modal-content {
     background-color: #ffffff;
     padding: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     max-width: 1000px;
     width: 100%;
     margin: auto;
+    margin-top: 10%;
+}
+
+.modal-text {
+    background-color:#d4ebf7;
+    border-radius: 10px;
+    padding: 10px;
 }
 
 .close {
@@ -674,10 +712,38 @@ input {
 }
 
 /* Styling for dashboard.html (buttons, etc.) */
+
+/* Hide the default file input */
+/* .file-upload input[type="file"] {
+    display: none;
+} */
+
+.upload-status {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between the button and spinner */
+}
+
+#fileInput {
+    display: none;
+}
+
+/* Style the custom file upload button */
+.custom-file-upload {
+    display: inline-block;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
 .upload-section {
     margin-bottom: 20px;
 }
-.upload-section input[type="file"] {
+/* .upload-section input[type="file"] {
     display: block;
     margin: 20px auto;
     padding: 15px;
@@ -685,7 +751,7 @@ input {
     border: 1px solid #ccc;
     cursor: pointer;
     width: 80%;
-}
+} */
 .upload-section button {
     background-color: #365B6D;
     color: white;
@@ -695,9 +761,11 @@ input {
     cursor: pointer;
     border-radius: 5px;
     font-size: 1.2 em;
+    transition: filter 0.2s transform 0.2s;
 }
 .upload-section button:hover {
-    background-color: #3498db;
+    filter: brightness(1.5);
+    transform: scale(1.1);
 }
 .loading-spinner {
     display: none;

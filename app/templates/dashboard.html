@@ -12,17 +12,23 @@
     <div class="upload-section">
         <h2>Upload a PDF</h2>
         <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" accept="application/pdf" required>
-            <button type="button" onclick="submitForm()">Start Generating</button>
+            <!-- <input type="file" name="file" accept="application/pdf" required> -->
+            <input type="file" id="fileInput" name="file" accept="application/pdf" required>
+            <label for="fileInput" class="custom-file-upload">
+                <img class="upload-icon" src="../static/blue-upload.png" alt="Upload PDF">
+            </label>
+
+            <div id="upload-status">
+                <div class="loading-spinner" id="loadingSpinner"></div>
+                <button id="startGenerating" style="font-size: 1em;" type="button" onclick="submitForm()">Start Generating</button>
+            </div>
         </form>
-        <div id="upload-status">
-            <div class="loading-spinner" id="loadingSpinner"></div>
-        </div>
+        
     </div>
     <div class="library-section">
         <h2>My Library</h2>
         <a href="/library">
-            <img src="../static/blue-folder.png" alt="My Library">
+            <img class="blue-folder" src="../static/blue-folder.png" alt="My Library">
         </a>
     </div>
 </div>
@@ -30,6 +36,7 @@
     function submitForm() {
         document.getElementById('uploadForm').submit();
         document.getElementById('loadingSpinner').style.display = 'block';
+        document.getElementById('startGenerating').style.display = 'none';
     }
 </script>
 {% endblock content %}
