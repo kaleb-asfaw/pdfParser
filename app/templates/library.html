@@ -7,160 +7,62 @@
 
         <div class="library" id="library">
             {% for pdf_name in pdf_files %}
-                <div class="file-card" onClick="window.location.href='/output?file={{ pdf_name }}'"> <!--?file={{ pdf_name }}-->
+                <div class="file-card" onClick="openModal('{{ pdf_name }}')"> <!--?file={{ pdf_name }}-->
                     {{ pdf_name }}
                 </div>
             {% endfor %}
         </div>
+
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h3 id="modal-title"></h3>
+                <audio id="audio" controls></audio>
+                <p id="summary-text"></p>
+                
+            </div>
+        </div>
+    
+        <script>
+            function openModal(pdfName) {
+                fetch(`/get_file_data?pdf_name=${pdfName}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('modal-title').innerText = pdfName;
+                        // const audio = document.getElementById('audio');
+                        // audio.innerHTML = data.audio_filename;
+                        // console.log(data.audio_filename);
+                        const audio = document.getElementById('audio');
+                        if (data.audio_filename) {
+                            audio.src = `/audios/${data.audio_filename}`;
+                            audio.style.display = 'block';
+                        } else {
+                            audio.style.display = 'none';
+                        }
+
+                        const summaryText = document.getElementById('summary-text');
+                        summaryText.innerHTML = data.summary_text;
+                        // if (data.audio_filename) {
+                        //     const audioItem = document.createElement('li');
+                        //     audioItem.innerText = data.audio_filename;
+                        //     audioList.appendChild(audioItem);
+                        // }
+                        document.getElementById('modal').style.display = 'block';
+                    })
+                    .catch(error => console.error('Error fetching file data:', error));
+            }
+    
+            function closeModal() {
+                document.getElementById('modal').style.display = 'none';
+            }
+    
+            window.onclick = function(event) {
+                if (event.target == document.getElementById('modal')) {
+                    closeModal();
+                }
+            }
+        </script>
            
     </main>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h3 id="modal-title"></h3>
-            <input type="file" id="audio-upload" accept="audio/*" multiple>
-            <ul id="audio-list"></ul>
-        </div>
-    </div> -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <script>
-        let folderCount = 0; // Start with 0 folders
-        const audioFiles = {}; // Object to store audio files for each folder
-
-        function addFolder() {
-            folderCount++;
-            const folderName = `Untitled ${folderCount}`;
-            const library = document.getElementById('library');
-            const folder = document.createElement('div');
-            folder.className = 'folder';
-            folder.innerHTML = `
-                <div class="folder-content">
-                    <img src="../static/blue-folder.png" alt="Folder">
-                    <h5 ondblclick="renameFolder('${folderName}', this)">${folderName}</h5>
-                </div>
-                <div class="folder-menu">
-                    <button onclick="openFolder('${folderName}')">Open</button>
-                    <button onclick="renameFolder('${folderName}', this)">Rename</button>
-                    <button onclick="deleteFolder('${folderName}', this)">Delete</button>
-                </div>
-            `;
-            const secondToLastChild = library.children[library.children.length - 1];
-            library.insertBefore(folder, secondToLastChild);
-
-            audioFiles[folderName] = []; // Initialize empty array for audio files
-        }
-
-        function openFolder(folderId) {
-            document.getElementById('modal-title').innerText = `Manage ${folderId}`;
-            document.getElementById('modal').style.display = 'block';
-            document.getElementById('audio-upload').dataset.folder = folderId;
-            renderAudioList(folderId);
-        }
-
-        function closeModal() {
-            document.getElementById('modal').style.display = 'none';
-        }
-
-        function renameFolder(folderId, buttonElement) {
-            const newName = prompt('Enter new folder name:', folderId);
-            if (newName && newName !== folderId) {
-                const folderDiv = buttonElement.closest('.folder');
-
-                // Update folder name in HTML
-                const folderNameElement = folderDiv.querySelector('h5');
-                folderNameElement.innerText = newName;
-
-                // Update folder functions to use new name
-                folderDiv.querySelector('.folder-menu button:nth-child(1)').setAttribute('onclick', `openFolder('${newName}')`);
-                folderDiv.querySelector('.folder-menu button:nth-child(2)').setAttribute('onclick', `renameFolder('${newName}', this)`);
-                folderDiv.querySelector('.folder-menu button:nth-child(3)').setAttribute('onclick', `deleteFolder('${newName}', this)`);
-
-                // Update audioFiles keys
-                audioFiles[newName] = audioFiles[folderId];
-                delete audioFiles[folderId];
-            }
-        }
-
-        function deleteFolder(folderId, buttonElement) {
-            if (confirm(`Are you sure you want to delete folder ${folderId}?`)) {
-                const folderDiv = buttonElement.closest('.folder');
-                folderDiv.remove();
-                delete audioFiles[folderId];
-            }
-        }
-
-        function renderAudioList(folderId) {
-            const audioList = document.getElementById('audio-list');
-            audioList.innerHTML = '';
-            const files = audioFiles[folderId];
-            files.forEach((file, index) => {
-                const listItem = document.createElement('li');
-                listItem.innerHTML = `
-                    <span onclick="renameAudio('${folderId}', ${index})">${file.name}</span>
-                    <button onclick="deleteAudio('${folderId}', ${index})">Delete</button>
-                `;
-                audioList.appendChild(listItem);
-            });
-        }
-
-        function renameAudio(folderId, index) {
-            const newName = prompt('Enter new audio name:', audioFiles[folderId][index].name);
-            if (newName) {
-                audioFiles[folderId][index].name = newName;
-                renderAudioList(folderId);
-            }
-        }
-
-        function deleteAudio(folderId, index) {
-            audioFiles[folderId].splice(index, 1);
-            renderAudioList(folderId);
-        }
-
-        document.getElementById('audio-upload').addEventListener('change', (event) => {
-            const folderId = event.target.dataset.folder;
-            const files = event.target.files;
-            for (let file of files) {
-                audioFiles[folderId].push({ name: file.name, file });
-            }
-            renderAudioList(folderId);
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            // Initialize audio files for existing folders
-            for (let i = 1; i <= folderCount; i++) {
-                audioFiles[`Untitled ${i}`] = [];
-            }
-        });
-    </script>
 {% endblock content %}
+

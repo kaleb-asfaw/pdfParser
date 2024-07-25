@@ -1,4 +1,4 @@
-from flask import (Flask, render_template, send_from_directory, abort, redirect, url_for, request, session)
+from flask import (Flask, render_template, send_from_directory, abort, redirect, url_for, request, session, jsonify)
 from flask_behind_proxy import FlaskBehindProxy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import sys, os, base64, time, markdown2
@@ -11,6 +11,8 @@ from bs4 import BeautifulSoup
 from app.login_db import find_user_by_email, create_user, get_db_connection, get_pdf_file_paths, find_user_id_by_email
 
 SUMMARY_TEXT_DEFAULT = "Sorry, we couldn't find the summary text. Try uploading your file again."
+AUDIO_DIRECTORY = '/Users/kaysweet/Documents/GitHub/pdfParser/func/recordings'
+
 
 app = Flask(__name__)
 proxied = FlaskBehindProxy(app)
@@ -152,6 +154,8 @@ def upload():
         return redirect(url_for('output'))
     else:
         return "Invalid file type. Only PDFs are allowed."
+    
+
 
 @app.route('/library', methods=['GET'])
 @login_required
@@ -164,13 +168,49 @@ def library():
 
     return render_template('library.html', pdf_files=pdf_files)
 
+@app.route('/audios/<filename>')
+# @login_required
+def serve_audio(filename):
+    print('IN AUDIO DIRECTORY')
+    print('FILENAME', filename)
+    return send_from_directory(AUDIO_DIRECTORY, filename)
+
+
+@app.route('/get_file_data', methods=['GET'])
+@login_required
+def get_file_data():
+    pdf_name = request.args.get('pdf_name')
+
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM user_files WHERE user_id = ? AND pdf_path = ? LIMIT 1", 
+                   (current_user.id, pdf_name))
+    user_file = cursor.fetchone()
+    conn.close()
+    
+    if user_file:
+        data = {
+
+            'summary_text': user_file['summary_text'],
+            'audio_filename': os.path.basename(user_file['mp3_path']),
+        }
+    else:
+        data = {
+            'summary_text': '',
+            'audio_filename': None
+        }
+    print('HELLO HERES THE AUDIO FILENAME',data['audio_filename'])
+
+    return jsonify(data)
+
 @app.route('/output', methods=['GET', 'POST'])
 @login_required
 def output():
 
-    pdf_name = request.args.get('pdf_name')
-    if pdf_name:
-        return 'I GOT A PDF'
+    # pdf_name = request.args.get('pdf_name')
+    # if pdf_name:
+    #     return 'I GOT A PDF'
     
     conn = get_db_connection()
     cursor = conn.cursor()
