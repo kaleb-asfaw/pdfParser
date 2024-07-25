@@ -517,6 +517,34 @@ input {
     align-items: center;
 }
 
+.file-card {
+    background-color: #fff;
+    padding: 20px;
+    /* margin: 20px; */
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    box-sizing: border-box;
+    width: 30vw; 
+    height: 10vh;
+    text-align: center;
+    transition: transform 0.3s background-color 0.3s;
+}
+
+.file-card:hover {
+    background-color: #a3cce7;
+    transform: scale(1.1);
+}
+
+
+.audio-and-title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Center items horizontally */
+    margin-bottom: 20px;
+}
+
 .add-folder {
     width: 50px;
     height: 50px;
@@ -599,7 +627,7 @@ input {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    max-width: 500px;
+    max-width: 1000px;
     width: 100%;
     margin: auto;
 }

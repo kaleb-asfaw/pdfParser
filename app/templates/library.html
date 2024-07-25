@@ -6,9 +6,9 @@
         <h2 class="left-margin">My Library</h2>
 
         <div class="library" id="library">
-            {% for pdf_name in pdf_files %}
-                <div class="file-card" onClick="openModal('{{ pdf_name }}')"> <!--?file={{ pdf_name }}-->
-                    {{ pdf_name }}
+            {% for pdf_name in pdf_names %}
+                <div class="file-card" onClick="openModal('{{ pdf_name }}', '{{ pdf_path }}')"> <!--?file={{ pdf_name }}-->
+                    <p>{{ pdf_name }}</p>
                 </div>
             {% endfor %}
         </div>
@@ -16,19 +16,22 @@
         <div id="modal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal()">&times;</span>
-                <h3 id="modal-title"></h3>
-                <audio id="audio" controls>Your browser doesn't support the audio element</audio>
+                <div class="audio-and-title">
+                    <h3 id="modal-title"></h3>
+                    <audio id="audio" controls>Your browser doesn't support the audio element</audio>
+                </div>
                 <p id="summary-text"></p>
                 
             </div>
         </div>
     
         <script>
-            function openModal(pdfName) {
-                fetch(`/get_file_data?pdf_name=${pdfName}`)
+            function openModal(pdfName, basePath) {
+                console.log(pdfName, basePath)
+                fetch(`/get_file_data?pdf_name=${pdfName}&base_path=${basePath}`)
                     .then(response => response.json())
                     .then(data => {
-                        document.getElementById('modal-title').innerText = pdfName;
+                        document.getElementById('modal-title').innerText = data.pdf_name;
                         const audio = document.getElementById('audio');
                         if (data.audio_filename) {
                             audio.src = `/download/${encodeURIComponent(data.audio_filename)}`; // {{ url_for('download', filename=audio_filename) }}

@@ -161,13 +161,19 @@ def upload():
 @login_required
 def library():
     # display all libraries for this user
-    # db
-    print('URL:', url_for('serve_audio', filename='1721861311.mp3'))
 
     user_id = find_user_id_by_email(current_user.email)
     pdf_files = get_pdf_file_paths(user_id)
+    pdf_names = []
 
-    return render_template('library.html', pdf_files=pdf_files)
+    if pdf_files:
+        pdf_path =  os.path.dirname(pdf_files[0]) + '/'
+        for path in pdf_files:
+            pdf_names.append(os.path.basename(path))
+    else:
+        pass # what to do with pdf path?
+
+    return render_template('library.html', pdf_names=pdf_names, pdf_path=pdf_path)
 
 
 
@@ -175,27 +181,31 @@ def library():
 @login_required
 def get_file_data():
     pdf_name = request.args.get('pdf_name')
+    base_path = request.args.get('base_path')
 
 
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM user_files WHERE user_id = ? AND pdf_path = ? LIMIT 1", 
-                   (current_user.id, pdf_name))
+                   (current_user.id, base_path + pdf_name))
     user_file = cursor.fetchone()
     conn.close()
+    print('USER FILE', current_user.id)
     
     if user_file:
         data = {
-
-            'summary_text': user_file['summary_text'],
+            'pdf_name': pdf_name,
+            'summary_text': markdown2.markdown(user_file['summary_text']),
             'audio_filename': os.path.basename(user_file['mp3_path']),
         }
     else:
         data = {
+            'pdf_name': '',
             'summary_text': '',
             'audio_filename': None
         }
-    print('HELLO HERES THE AUDIO FILENAME',data['audio_filename'])
+
+    print('DATA', data)
 
     return jsonify(data)
 
