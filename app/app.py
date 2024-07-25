@@ -162,18 +162,13 @@ def upload():
 def library():
     # display all libraries for this user
     # db
+    print('URL:', url_for('serve_audio', filename='1721861311.mp3'))
 
     user_id = find_user_id_by_email(current_user.email)
     pdf_files = get_pdf_file_paths(user_id)
 
     return render_template('library.html', pdf_files=pdf_files)
 
-@app.route('/audios/<filename>')
-# @login_required
-def serve_audio(filename):
-    print('IN AUDIO DIRECTORY')
-    print('FILENAME', filename)
-    return send_from_directory(AUDIO_DIRECTORY, filename)
 
 
 @app.route('/get_file_data', methods=['GET'])
@@ -207,10 +202,6 @@ def get_file_data():
 @app.route('/output', methods=['GET', 'POST'])
 @login_required
 def output():
-
-    # pdf_name = request.args.get('pdf_name')
-    # if pdf_name:
-    #     return 'I GOT A PDF'
     
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -248,3 +239,4 @@ def webhook():
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")
+    
