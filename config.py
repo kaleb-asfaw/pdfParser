@@ -1,1 +1,0 @@
-supabase_password = 'U8ZtRGqbcWoKsf4g'
