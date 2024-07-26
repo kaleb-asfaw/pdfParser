@@ -9,9 +9,10 @@ from func.synthesize import make_mp3
 import bcrypt
 from bs4 import BeautifulSoup
 from app.login_db import find_user_by_email, create_user, get_db_connection, get_pdf_file_paths, find_user_id_by_email
+from func.database import upload_audio, fetch_audio
 
 SUMMARY_TEXT_DEFAULT = "Sorry, we couldn't find the summary text. Try uploading your file again."
-AUDIO_DIRECTORY = '/Users/kaysweet/Documents/GitHub/pdfParser/func/recordings'
+# AUDIO_DIRECTORY = '/Users/kaysweet/Documents/GitHub/pdfParser/func/recordings'
 
 
 app = Flask(__name__)
@@ -140,6 +141,7 @@ def upload():
             with open(mp3_path, 'wb') as mp3_file:
                 mp3_file.write(mp3_data)
             
+            upload_audio(current_user.id, mp3_filename, mp3_data) # UPLOAD AUDIO TO SUPABASE
             # Save file paths to the database
             conn = get_db_connection()
             cursor = conn.cursor()
