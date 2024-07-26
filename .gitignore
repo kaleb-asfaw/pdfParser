@@ -12,3 +12,4 @@ text_files/
 credentials.json
 *.mp3
 *.wav
+config.py
