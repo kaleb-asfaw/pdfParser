@@ -41,4 +41,5 @@ def fetch_audio(user_id, mp3_filename):
         raise ValueError(f"Error fetching from Supabase Storage: {e}")
 
 if __name__ == "__main__":
-    print(fetch_audio(1,"1721963765.mp3"))
+    #print(fetch_audio(1,"1721963765.mp3"))
+    pass
