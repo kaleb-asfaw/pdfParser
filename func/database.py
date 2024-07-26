@@ -31,4 +31,14 @@ def upload_audio(user_id, mp3_filename, mp3_data):
 
     
 def fetch_audio(user_id, mp3_filename):
-    pass
+    bucket_name = "mp3"
+    file_path = f"{user_id}/{mp3_filename}"
+
+    try:
+        response = supabase.storage.from_(bucket_name).download(file_path)
+        return response
+    except Exception as e:
+        raise ValueError(f"Error fetching from Supabase Storage: {e}")
+
+if __name__ == "__main__":
+    print(fetch_audio(1,"1721963765.mp3"))
