@@ -10,5 +10,6 @@ __pycache__/
 recordings/
 text_files/
 credentials.json
+config.py
 *.mp3
 *.wav
