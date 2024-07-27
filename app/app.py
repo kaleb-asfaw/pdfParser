@@ -1,18 +1,26 @@
-from flask import (Flask, render_template, send_from_directory, abort, redirect, url_for, request, session, jsonify)
+from flask import (
+    Flask, 
+    render_template, 
+    redirect, 
+    url_for, 
+    jsonify, 
+    send_file,
+    request, session,
+    )
 from flask_behind_proxy import FlaskBehindProxy
+from io import BytesIO
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-import sys, os, base64, time, markdown2
+import sys, os, time, markdown2
 import git
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from func.parse import get_summary_from_upload
 from func.synthesize import make_mp3
 import bcrypt
 from bs4 import BeautifulSoup
-from app.login_db import find_user_by_email, create_user, get_db_connection, get_pdf_file_paths, find_user_id_by_email
-from func.database import upload_audio, fetch_audio
+from app.login_db import find_user_by_email, create_user, get_db_connection
+from func.database import upload_audio, fetch_audio, get_mp3_file_names, upload_text, fetch_text
 
 SUMMARY_TEXT_DEFAULT = "Sorry, we couldn't find the summary text. Try uploading your file again."
-# AUDIO_DIRECTORY = '/Users/kaysweet/Documents/GitHub/pdfParser/func/recordings'
 
 
 app = Flask(__name__)
@@ -22,7 +30,7 @@ if not os.environ.get('FLASK_KEY'):
     app.config['SECRET_KEY'] = 'a5783ee1abf428d9a22445b69e1c1ab4'
 
 # configure upload folder location
-app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'func/recordings')
+app.config['UPLOAD_FOLDER'] = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'func/pdf')
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -107,55 +115,51 @@ def dashboard():
     user_email = current_user.email
     return render_template('dashboard.html', user_email=user_email)
 
+def process_text_and_audio(file):
+    # unique filename using timestamp // -4 to remove pdf
+    upload_timestamp = int(time.time())
+    filename = f'{upload_timestamp}_{file.filename[:-4]}'
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    file.save(file_path)
+    print('FILE UPLOADED SUCCESSFULLY: ', file_path)
+
+    try:
+        summary_text = get_summary_from_upload(file_path)
+    except ValueError as e:
+        summary_text = SUMMARY_TEXT_DEFAULT
+        print('ERROR with getting summary text for upload: ', e)
+
+    # delete after using file
+    os.remove(file_path)
+    print('FILE DELETED SUCCESSFULLY: ', file_path)
+
+    # take out markdown for text-to-speech
+    html_str = markdown2.markdown(summary_text)
+    soup = BeautifulSoup(html_str, 'html.parser')
+    plain_text = soup.get_text()
+
+    mp3_data = make_mp3(plain_text)
+    return html_str, mp3_data, filename
+
 @app.route('/upload', methods=["POST"])
 @login_required
 def upload():
+    # edge cases
     if 'file' not in request.files:
         return "No file part"
-    
     file = request.files['file']
-    
     if file.filename == '':
         return "No selected file"
-    
-    if file and file.filename.endswith('.pdf'):
-        user_folder = os.path.join(app.config['UPLOAD_FOLDER'], str(current_user.id))
-        os.makedirs(user_folder, exist_ok=True)
-        
-        filename = f'{int(time.time())}_{file.filename}'  # unique filename using timestamp
-        file_path = os.path.join(user_folder, filename)
-        file.save(file_path)
-        print('FILE UPLOADED SUCCESSFULLY: ', file_path)
-
-        try:
-            summary_text = get_summary_from_upload(file_path)
-            # takes out markdown for text-to-speech
-            html_str = markdown2.markdown(summary_text)
-            soup = BeautifulSoup(html_str, 'html.parser')
-            plain_text = soup.get_text()
-            #print(plain_text)
-            mp3_data = make_mp3(plain_text)
-            # Save MP3 file
-            mp3_filename = f'{int(time.time())}.mp3'
-            mp3_path = os.path.join(user_folder, mp3_filename)
-            with open(mp3_path, 'wb') as mp3_file:
-                mp3_file.write(mp3_data)
-            
-            upload_audio(current_user.id, mp3_filename, mp3_data) # UPLOAD AUDIO TO SUPABASE
-            # Save file paths to the database
-            conn = get_db_connection()
-            cursor = conn.cursor()
-            cursor.execute("INSERT INTO user_files (user_id, pdf_path, mp3_path, summary_text) VALUES (?, ?, ?, ?)",
-                           (current_user.id, file_path, mp3_path, summary_text))
-            conn.commit()
-            conn.close()
-            
-        except ValueError as e:
-            print('ERROR with getting summary text for upload: ', e)
-
-        return redirect(url_for('output'))
-    else:
+    elif not file.filename.endswith('.pdf'):
         return "Invalid file type. Only PDFs are allowed."
+    
+    html_summary, mp3_data, filename = process_text_and_audio(file)
+
+    # save to supabase
+    upload_audio(current_user.id, f'{filename}.mp3', mp3_data)
+    upload_text(current_user.id, filename, html_summary)
+    
+    return redirect(url_for('output', summary_text=html_summary, mp3_filename=f'{filename}.mp3'))
     
 
 
@@ -163,81 +167,39 @@ def upload():
 @login_required
 def library():
     # display all libraries for this user
+    mp3_filenames = get_mp3_file_names(current_user.id)
+    return render_template('library.html', mp3_names=mp3_filenames, user_id=current_user.id)
 
-    user_id = find_user_id_by_email(current_user.email)
-    pdf_files = get_pdf_file_paths(user_id)
-    pdf_names = []
-
-    if pdf_files:
-        pdf_path =  os.path.dirname(pdf_files[0]) + '/'
-        for path in pdf_files:
-            pdf_names.append(os.path.basename(path))
-    else:
-        pass # what to do with pdf path?
-
-    return render_template('library.html', pdf_names=pdf_names, pdf_path=pdf_path)
-
-
-
-@app.route('/get_file_data', methods=['GET'])
+@app.route('/fetch_audio/<user_id>/<mp3_filename>', methods=['GET'])
 @login_required
-def get_file_data():
-    pdf_name = request.args.get('pdf_name')
-    base_path = request.args.get('base_path')
-
-
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM user_files WHERE user_id = ? AND pdf_path = ? LIMIT 1", 
-                   (current_user.id, base_path + pdf_name))
-    user_file = cursor.fetchone()
-    conn.close()
-    print('USER FILE', current_user.id)
+def fetch_audio_route(user_id, mp3_filename):
+    try:
+        binary_data = fetch_audio(user_id, mp3_filename)
+        return send_file(BytesIO(binary_data), mimetype='audio/mp3')
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
     
-    if user_file:
-        data = {
-            'pdf_name': pdf_name,
-            'summary_text': markdown2.markdown(user_file['summary_text']),
-            'audio_filename': os.path.basename(user_file['mp3_path']),
-        }
-    else:
-        data = {
-            'pdf_name': '',
-            'summary_text': '',
-            'audio_filename': None
-        }
+@app.route('/fetch_text/<user_id>/<filename>', methods=['GET'])
+def fetch_text_route(user_id, filename):
+    try:
+        text = fetch_text(user_id, filename)
+        html_str = markdown2.markdown(text['text'])
+        return jsonify({'text': html_str})
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
 
-    print('DATA', data)
-
-    return jsonify(data)
-
-@app.route('/output', methods=['GET', 'POST'])
+@app.route('/output', methods=['GET'])
 @login_required
 def output():
     
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM user_files WHERE user_id = ? ORDER BY id DESC LIMIT 1", (current_user.id,))
-    user_file = cursor.fetchone()
-    conn.close()
-    
-    if user_file:
-        summary_text = markdown2.markdown(user_file['summary_text'])
-        audio_filename = os.path.basename(user_file['mp3_path'])
-    else:
-        summary_text =  markdown2.markdown(SUMMARY_TEXT_DEFAULT)
-        audio_filename = None
+    session['summary_text'] = request.args.get('summary_text', '') #TODO: think of a better way to do this
+    if not session['summary_text']:
+        session['summary_text'] = SUMMARY_TEXT_DEFAULT
 
-    return render_template('output.html', summary_text=summary_text, audio_filename=audio_filename)
+    mp3_filename = request.args.get('mp3_filename', '')
 
-@app.route('/download/<filename>')
-@login_required
-def download(filename):
-    user_folder = os.path.join(app.config['UPLOAD_FOLDER'], str(current_user.id))
-    try:
-        return send_from_directory(user_folder, filename, as_attachment=True)
-    except FileNotFoundError:
-        abort(404)
+    return render_template('output.html', user_id=current_user.id, audio_filename=mp3_filename)
+
 
 @app.route("/update_server", methods=['POST'])
 def webhook():
