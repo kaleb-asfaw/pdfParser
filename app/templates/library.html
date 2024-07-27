@@ -6,9 +6,9 @@
         <h2 class="left-margin">My Library</h2>
 
         <div class="library" id="library">
-            {% for pdf_name in pdf_names %}
-                <div class="file-card" onClick="openModal('{{ pdf_name }}', '{{ pdf_path }}')"> <!--?file={{ pdf_name }}-->
-                    <p>{{ pdf_name }}</p>
+            {% for mp3_name in mp3_names %}
+                <div class="file-card" onClick="openModal('{{ mp3_name }}')"> 
+                    <p>{{ mp3_name }}</p>
                 </div>
             {% endfor %}
         </div>
@@ -29,29 +29,57 @@
         </div>
     
         <script>
-            function openModal(pdfName, basePath) {
-                console.log(pdfName, basePath)
-                fetch(`/get_file_data?pdf_name=${pdfName}&base_path=${basePath}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('modal-title').innerText = data.pdf_name;
-                        const audio = document.getElementById('audio');
-                        if (data.audio_filename) {
-                            audio.src = `/download/${encodeURIComponent(data.audio_filename)}`; // {{ url_for('download', filename=audio_filename) }}
-                            audio.style.display = 'block';
-                        } else {
-                            audio.style.display = 'none';
-                        }
+            const userId = "{{ user_id }}";
 
-                        const summaryText = document.getElementById('summary-text');
-                        summaryText.innerHTML = data.summary_text;
-                        document.getElementById('modal').style.display = 'block';
-                    })
-                    .catch(error => console.error('Error fetching file data:', error));
+            async function loadAudio(userId, mp3Filename) {
+                try {
+                    const response = await fetch(`/fetch_audio/${userId}/${mp3Filename}`);
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const audioBlob = await response.blob();
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    const audioPlayer = document.getElementById('audio');
+                    audioPlayer.src = audioUrl;
+                    audioPlayer.load();
+                } catch (error) {
+                    console.error('Error fetching audio:', error);
+                }
+            }
+
+            async function loadText(userId, filename) {
+                try {
+                    const response = await fetch(`/fetch_text/${userId}/${filename}`);
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const textResponse = await response.json();
+                    const textPara = document.getElementById('summary-text');
+                    
+                    if (textResponse.text) {
+                        textPara.innerHTML = textResponse.text;
+                    } else {
+                        textPara.innerHTML = `Text not found. Please try again.`;
+                        throw new Error('Text not found in response');
+                    }
+                } catch (error) {
+                    console.error('Error fetching text:', error);
+                }
+            }
+
+            function openModal(mp3Filename) {
+                console.log("opening modal", mp3Filename)
+                console.log(mp3Filename.slice(0, -4))
+                loadAudio(userId, mp3Filename);
+                loadText(userId, mp3Filename.slice(0, -4));
+                document.getElementById('modal').style.display = 'block';
             }
     
             function closeModal() {
                 document.getElementById('modal').style.display = 'none';
+                const audioPlayer = document.getElementById('audio');
+                audioPlayer.pause();
+                audioPlayer.currentTime = 0;
             }
     
             window.onclick = function(event) {

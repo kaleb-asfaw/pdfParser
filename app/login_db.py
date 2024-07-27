@@ -49,10 +49,12 @@ def create_files_table():
 def get_pdf_file_paths(user_id):
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
-    cursor.execute("SELECT pdf_path FROM user_files WHERE user_id=?", (user_id,))
+    cursor.execute("SELECT mp3_path FROM user_files WHERE user_id=?", (user_id,))
     pdf_files = [row[0] for row in cursor.fetchall()]
     conn.close()
     return pdf_files
+
+
 
 def clear_files_table():
     """
