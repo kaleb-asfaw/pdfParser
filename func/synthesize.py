@@ -81,38 +81,7 @@ def make_mp3(text):
         input=synthesis_input, voice=voice, audio_config=audio_config
     )
 
-    # # Create the output directory
-    # script_dir = os.path.dirname(os.path.abspath(__file__))
-    # output_dir = os.path.join(script_dir, 'recordings')
-    # os.makedirs(output_dir, exist_ok=True)
-
-
-    # # Construct the full file path
-    # output_file = os.path.join(output_dir, f"{filename}.mp3")
-
-    # # Write the response to the output file
-    # with open(output_file, "wb") as out:
-    #     out.write(response.audio_content)
-    #     print(f'Audio content written to file "{output_file}"')
-
     return response.audio_content
 
-
-# list_voices()
-
-# Example usage of text_to_speech
-# input_file = "func/text_files/input.txt"
-# output_file = "func/recordings/output3.mp3"
-# text_to_speech(input_file, output_file)
-
-
-# def list_voices():
-#     # Call the API to list voices
-#     response = client.list_voices()
-
-#     # Print available voices
-#     for voice in response.voices:
-#         print(f"Name: {voice.name}")
-#         print(f"Language Codes: {', '.join(voice.language_codes)}")
-#         print(f"SSML Gender: {voice.ssml_gender}")
-#         print("")
+if __name__=='__main__':
+    pass

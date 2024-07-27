@@ -68,10 +68,10 @@
             }
 
             function openModal(mp3Filename) {
-                console.log("opening modal", mp3Filename)
-                console.log(mp3Filename.slice(0, -4))
                 loadAudio(userId, mp3Filename);
                 loadText(userId, mp3Filename.slice(0, -4));
+                
+                document.getElementById('modal-title').innerHTML = mp3Filename.slice(0, -4);
                 document.getElementById('modal').style.display = 'block';
             }
     

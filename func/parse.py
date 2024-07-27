@@ -175,7 +175,5 @@ if __name__ == "__main__":
     except Exception as e:
         print("An error occurred:", e)
 
-# if __name__ == "__main__":
-#     file = "func/pdf/Quant guide (SBC).pdf"
-#     start, end = 5, 8
-#     print(get_summary(get_jumbled_text(file)))
+if __name__ == "__main__":
+    pass
